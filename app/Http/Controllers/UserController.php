@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     /**
      * Store a newly created resource in storage.
      *
@@ -38,6 +37,5 @@ class UserController extends Controller
             'type' => User::TYPE_USER,
             'password' => Hash::make($request->password),
         ]);
-
     }
 }

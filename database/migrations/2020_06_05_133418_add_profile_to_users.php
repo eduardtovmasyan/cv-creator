@@ -14,7 +14,7 @@ class AddProfileToUsers extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('surname');
+            $table->string('surname')->after('name');
             $table->integer('age');
             $table->string('gender');
             $table->string('phone')->unique()->nullable();
