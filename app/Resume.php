@@ -6,23 +6,33 @@ use Illuminate\Database\Eloquent\Model;
 
 class Resume extends Model
 {
-    public function education_establishments()
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'surname', 'gender', 'age', 'email', 
+        'phone', 'user_id',
+    ];
+
+    public function educationEstablishments()
     {
-        return $this->hasMany();
+        return $this->hasMany(EducationalEstablishment::class);
     } 
 
     public function skills()
     {
-        return $this->hasMany();
+        return $this->hasMany(Skill::class);
     }   
 
     public function languages()
     {
-        return $this->hasMany();
+        return $this->hasMany(Language::class);
     }  
 
-    public function work_paces()
+    public function workPlaces()
     {
-        return $this->hasMany();
+        return $this->hasMany(WorkPlace::class);
     }    
 }

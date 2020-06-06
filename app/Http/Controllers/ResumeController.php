@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Skill;
 use Validator;
 use App\Resume;
+use App\Language;
+use App\WorkPlace;
 use Illuminate\Http\Request;
+use App\EducationalEstablishment;
+use Illuminate\Support\Facades\Auth;
 
 class ResumeController extends Controller
 {
@@ -31,26 +36,63 @@ class ResumeController extends Controller
             'surname' => 'required|string|max:255',
             'age' => 'required|integer|between:18,100',
             'gender' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'nullable|numeric|unique:users,phone',
+            'email' => 'required|email',
+            'phone' => 'nullable|numeric',
             'educations' => 'required|array',
             'educations.*.name' => 'required|string|max:255',
             'educations.*.facultet' => 'required|string|max:255',
             'educations.*.place' => 'required|string|max:255',
             'educations.*.start' => 'required|date',
-            'educations.*.end' => 'required|date|after:start',
+            'educations.*.end' => 'required|date|after:educations.*.start',
             'work_places' => 'required|array',
             'work_places.*.name' => 'required|string|max:255',
             'work_places.*.position' => 'required|string|max:255',
             'work_places.*.place' => 'required|string|max:255',
             'work_places.*.start' => 'required|date',
-            'work_places.*.end' => 'required|date|after:start',
+            'work_places.*.end' => 'required|date|after:work_places.*.start',
             'languages' => 'required|array',
             'languages.*.name' => 'required|string|max:255',
             'languages.*.description' => 'required|string|max:65000',
             'skills' => 'required|array',
             'skills.*.name' => 'required|string|max:255',
         ])->validate();
+
+        $resume = Resume::create([
+            'user_id' => Auth::id(),
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'age' => $request->age,
+            'gender' => $request->gender,
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ]);
+
+        $skillModels = [];
+        $eduModels = [];
+        $workModels = [];
+        $langModels = [];
+
+        foreach ($request->skills as $skill) {
+            $skillModels[] = Skill::make($skill);
+        }
+        $resume->skills()->saveMany($skillModels);
+
+        foreach ($request->educations as $education) {
+            $eduModels[] = EducationalEstablishment::make($education);
+        }
+        $resume->educationEstablishments()->saveMany($eduModels);
+
+        foreach ($request->work_places as $workPlace) {
+            $workModels[] = WorkPlace::make($workPlace);
+        }
+        $resume->workPlaces()->saveMany($workModels);
+
+        foreach ($request->languages as $language) {
+            $langModels[] = Language::make($language);
+        }
+        $resume->languages()->saveMany($langModels);
+
+        return $resume;
     }
 
     /**

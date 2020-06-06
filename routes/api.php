@@ -14,8 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::resource('user', 'UserController', [
+    'only' => ['index', 'store', 'show', 'update', 'destroy']
+]);
+
 Route::group(['middleware' => ['auth:api']], function() {
-    Route::resource('user', 'UserController', [
+    Route::resource('resume', 'ResumeController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
 });
