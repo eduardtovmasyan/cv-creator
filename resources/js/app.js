@@ -1,10 +1,11 @@
 require('./bootstrap');
 window.Vue = require('vue')
-import VueRouter from "vue-router";
+import VueRouter from 'vue-router';
 Vue.use(VueRouter);
-import VueAxios from "vue-axios";
-import axios from "axios";
+import VueAxios from 'vue-axios';
+import axios from 'axios';
 Vue.use(VueAxios,axios);
+import Menu from "./menu.vue"
 
 Vue.component(
     'passport-clients',
@@ -20,3 +21,14 @@ Vue.component(
     'passport-personal-access-tokens',
     require('./components/passport/PersonalAccessTokens.vue')
 );
+
+let r =[
+	{path:'/home',component:Menu},
+	// {path:'/admin/users',component:User},
+	// {path:'/admin/products',component:Product},
+]
+let router = new VueRouter({
+	routes:r,
+	mode:'history'
+})
+let vm = new Vue(Vue.util.extend({router:router},Menu)).$mount('#app')
