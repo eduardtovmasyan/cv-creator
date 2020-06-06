@@ -17,8 +17,7 @@ class CreateResumesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('surname');
-            $table->integer('age');
-            $table->string('gender');
+            $table->dateTime('birthday');
             $table->string('phone');
             $table->string('email');
             $table->unsignedBigInteger('user_id');

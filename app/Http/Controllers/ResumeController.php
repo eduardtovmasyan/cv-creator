@@ -10,6 +10,7 @@ use App\WorkPlace;
 use Illuminate\Http\Request;
 use App\EducationalEstablishment;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\Resume as ResumeResource;
 
 class ResumeController extends Controller
 {
@@ -20,7 +21,9 @@ class ResumeController extends Controller
      */
     public function index()
     {
-        //
+        $resumes = Resume::paginate(parent::PER_PAGE);
+
+        return ResumeResource::collection($resumes);
     }
 
     /**
@@ -34,8 +37,7 @@ class ResumeController extends Controller
         Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
-            'age' => 'required|integer|between:18,100',
-            'gender' => 'required',
+            'birthday' => 'required|date|before:18 years ago',
             'email' => 'required|email',
             'phone' => 'nullable|numeric',
             'educations' => 'required|array',
@@ -61,8 +63,7 @@ class ResumeController extends Controller
             'user_id' => Auth::id(),
             'name' => $request->name,
             'surname' => $request->surname,
-            'age' => $request->age,
-            'gender' => $request->gender,
+            'birthday' => $request->birthday,
             'email' => $request->email,
             'phone' => $request->phone,
         ]);
@@ -92,7 +93,7 @@ class ResumeController extends Controller
         }
         $resume->languages()->saveMany($langModels);
 
-        return $resume;
+        return ResumeResource::make($resume);
     }
 
     /**

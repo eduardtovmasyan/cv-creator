@@ -15,8 +15,7 @@ class AddProfileToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('surname')->after('name');
-            $table->integer('age');
-            $table->string('gender');
+            $table->dateTime('birthday');
             $table->string('phone')->unique()->nullable();
             $table->boolean('is_active')->default(false);
             $table->string('type')->index();
@@ -32,7 +31,7 @@ class AddProfileToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('surname');
-            $table->dropColumn('age');
+            $table->dropColumn('birthday');
             $table->dropColumn('gender');
             $table->dropColumn('phone');
             $table->dropColumn('is_active');

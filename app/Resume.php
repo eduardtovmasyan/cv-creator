@@ -12,7 +12,7 @@ class Resume extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'surname', 'gender', 'age', 'email', 
+        'name', 'surname', 'gender', 'birthday', 'email', 
         'phone', 'user_id',
     ];
 
