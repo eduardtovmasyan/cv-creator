@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<title>CV-Creater</title>
 	<!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <!-- jQuery library -->
@@ -19,4 +19,5 @@
 	<div id="app"></div>
 </body>
   <script type="text/javascript" src="{{mix('js/app.js')}}"></script>
+  <script type="text/javascript" src="{{ asset('js/login.js') }}"></script>
 </html>

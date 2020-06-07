@@ -18,6 +18,8 @@ Route::resource('user', 'UserController', [
     'only' => ['index', 'store', 'show', 'update', 'destroy']
 ]);
 
+Route::post('/login', "LoginController@logIn");
+
 Route::group(['middleware' => ['auth:api']], function() {
     Route::resource('resume', 'ResumeController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']

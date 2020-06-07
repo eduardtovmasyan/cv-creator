@@ -5,30 +5,17 @@ Vue.use(VueRouter);
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 Vue.use(VueAxios,axios);
-import Menu from "./menu.vue"
-
-Vue.component(
-    'passport-clients',
-    require('./components/passport/Clients.vue')
-);
-
-Vue.component(
-    'passport-authorized-clients',
-    require('./components/passport/AuthorizedClients.vue')
-);
-
-Vue.component(
-    'passport-personal-access-tokens',
-    require('./components/passport/PersonalAccessTokens.vue')
-);
+import Menu from "./Menu"
+import Login from "./components/LoginComponent.vue"
+import Profile from "./components/DashboardComponent.vue"
 
 let r =[
-	{path:'/home',component:Menu},
-	// {path:'/admin/users',component:User},
-	// {path:'/admin/products',component:Product},
+	{path:'/home' ,component:Menu},
+	{path:'/signin' ,component:Login},
+	{path:'/profile' ,component:Profile},
 ]
 let router = new VueRouter({
 	routes:r,
 	mode:'history'
 })
-let vm = new Vue(Vue.util.extend({router:router},Menu)).$mount('#app')
+let vm = new Vue(Vue.util.extend({router:router}, Menu)).$mount('#app')
