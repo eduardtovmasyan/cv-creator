@@ -1940,16 +1940,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      data: localStorage.getItem('bearerToken')
+      token: localStorage.getItem('bearerToken')
     };
   },
   methods: {
     logout: function logout(e) {
-      localStorage.removeItem('bearerToken');
-      window.location.href = '/signin';
+      this.axios.post('/api/logout', null, {
+        headers: {
+          'Authorization': 'Bearer ' + this.token
+        }
+      }).then(function (r) {
+        localStorage.removeItem('bearerToken');
+        window.location.href = '/signin';
+      });
     }
   }
 });
@@ -1972,9 +1988,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
-      data: localStorage.getItem('bearerToken')
-    };
+    return {};
   },
   methods: {}
 });
@@ -2032,16 +2046,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      data: localStorage.getItem('bearerToken')
+      signInForm: null,
+      signUpForm: null,
+      errors: {
+        signIn: {},
+        signUp: {}
+      }
     };
+  },
+  mounted: function mounted() {
+    this.signInForm = document.getElementById('sign-in-form');
+    this.signUpForm = document.getElementById('sign-up-form');
+    var signUpButton = document.getElementById('signUp');
+    var signInButton = document.getElementById('signIn');
+    var container = document.getElementById('container');
+    signUpButton.addEventListener('click', function () {
+      container.classList.add("right-panel-active");
+    });
+    signInButton.addEventListener('click', function () {
+      container.classList.remove("right-panel-active");
+    });
   },
   methods: {
     signin: function signin(e) {
-      var email = $(e.target).prev().prev().prev().val();
-      var password = $(e.target).prev().prev().val();
+      var _this = this;
+
+      var email = this.signInForm.querySelector('input[name="email"]').value;
+      var password = this.signInForm.querySelector('input[name="password"]').value;
       this.axios.post('api/login', {
         email: email,
         password: password
@@ -2051,25 +2090,23 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         localStorage.setItem('bearerToken', response.data.token);
-        console.log(localStorage.getItem('bearerToken'));
-        window.location.href = '/profile';
+        window.location.href = '/newcv';
         ;
       })["catch"](function (error) {
-        console.log(error.response.data);
+        _this.errors.signIn = error.response.data.errors || {};
+        _this.errors.signIn.message = error.response.data.message;
       });
     },
     signup: function signup(e) {
-      var name = $(e.target).prev().prev().prev().prev().prev().val();
-      var surname = $(e.target).prev().prev().prev().prev().val();
-      var email = $(e.target).prev().prev().prev().val();
-      var password = $(e.target).prev().prev().val();
-      var birthday = $(e.target).prev().val();
+      var _this2 = this;
+
+      var name = this.signUpForm.querySelector('input[name="name"]').value;
+      var email = this.signUpForm.querySelector('input[name="email"]').value;
+      var password = this.signUpForm.querySelector('input[name="password"]').value;
       this.axios.post('api/user', {
         email: email,
-        surname: surname,
         name: name,
-        password: password,
-        birthday: birthday
+        password: password
       }, {
         headers: {
           'Content-Type': 'application/json'
@@ -2077,10 +2114,279 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         window.location.href = '/signin';
       })["catch"](function (error) {
-        console.log(error.response.data);
+        _this2.errors.signUp = error.response.data.errors || {};
+        _this2.errors.signUp.message = error.response.data.message;
       });
     }
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MyCvComponent.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MyCvComponent.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      resume: []
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    this.axios.get("/api/getCv").then(function (r) {
+      _this.resume = r.data;
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NewCvComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/NewCvComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({// methods:{
+  //     creatCv(x){
+  //       this.axios.get(`/api/`).then((r)=>{
+  //       })
+  //     },
+  // }
 });
 
 /***/ }),
@@ -2116,7 +2422,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Montserrat:400,800);", ""]);
 
 // module
-exports.push([module.i, "\n* {\r\n  box-sizing: border-box;\n}\n.dbody {\r\n  background: #f6f5f7;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  flex-direction: column;\r\n  font-family: 'Montserrat', sans-serif;\r\n  height: 100vh;\r\n  margin: -20px 0 50px;\n}\nh1 {\r\n  font-weight: bold;\r\n  margin: 0;\n}\nh2 {\r\n  text-align: center;\n}\np {\r\n  font-size: 14px;\r\n  font-weight: 100;\r\n  line-height: 20px;\r\n  letter-spacing: 0.5px;\r\n  margin: 20px 0 30px;\n}\nspan {\r\n  font-size: 12px;\n}\na {\r\n  color: #333;\r\n  font-size: 14px;\r\n  text-decoration: none;\r\n  margin: 15px 0;\n}\nbutton {\r\n  border-radius: 20px;\r\n  border: 1px solid #FF4B2B;\r\n  background-color: #FF4B2B;\r\n  color: #FFFFFF;\r\n  font-size: 12px;\r\n  font-weight: bold;\r\n  padding: 12px 45px;\r\n  letter-spacing: 1px;\r\n  text-transform: uppercase;\r\n  transition: transform 80ms ease-in;\n}\nbutton:active {\r\n  transform: scale(0.95);\n}\nbutton:focus {\r\n  outline: none;\n}\nbutton.ghost {\r\n  background-color: transparent;\r\n  border-color: #FFFFFF;\n}\n.form {\r\n  background-color: #FFFFFF;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  flex-direction: column;\r\n  padding: 0 50px;\r\n  height: 100%;\r\n  text-align: center;\n}\ninput {\r\n  background-color: #eee;\r\n  border: none;\r\n  padding: 12px 15px;\r\n  margin: 8px 0;\r\n  width: 100%;\n}\n.container {\r\n  background-color: #fff;\r\n  border-radius: 10px;\r\n    box-shadow: 0 14px 28px rgba(0,0,0,0.25), \r\n      0 10px 10px rgba(0,0,0,0.22);\r\n  position: relative;\r\n  overflow: hidden;\r\n  width: 768px;\r\n  max-width: 100%;\r\n  min-height: 480px;\n}\n.form-container {\r\n  position: absolute;\r\n  top: 0;\r\n  height: 100%;\r\n  transition: all 0.6s ease-in-out;\n}\n.sign-in-container {\r\n  left: 0;\r\n  width: 50%;\r\n  z-index: 2;\n}\n.container.right-panel-active .sign-in-container {\r\n  transform: translateX(100%);\n}\n.sign-up-container {\r\n  left: 0;\r\n  width: 50%;\r\n  opacity: 0;\r\n  z-index: 1;\n}\n.container.right-panel-active .sign-up-container {\r\n  transform: translateX(100%);\r\n  opacity: 1;\r\n  z-index: 5;\r\n  animation: show 0.6s;\n}\n@keyframes show {\n0%, 49.99% {\r\n    opacity: 0;\r\n    z-index: 1;\n}\n50%, 100% {\r\n    opacity: 1;\r\n    z-index: 5;\n}\n}\n.overlay-container {\r\n  position: absolute;\r\n  top: 0;\r\n  left: 50%;\r\n  width: 50%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  transition: transform 0.6s ease-in-out;\r\n  z-index: 100;\n}\n.container.right-panel-active .overlay-container{\r\n  transform: translateX(-100%);\n}\n.overlay {\r\n  background: #FF416C;\r\n  background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);\r\n  background: linear-gradient(to right, #FF4B2B, #FF416C);\r\n  background-repeat: no-repeat;\r\n  background-size: cover;\r\n  background-position: 0 0;\r\n  color: #FFFFFF;\r\n  position: relative;\r\n  left: -100%;\r\n  height: 100%;\r\n  width: 200%;\r\n    transform: translateX(0);\r\n  transition: transform 0.6s ease-in-out;\n}\n.container.right-panel-active .overlay {\r\n    transform: translateX(50%);\n}\n.overlay-panel {\r\n  position: absolute;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  flex-direction: column;\r\n  padding: 0 40px;\r\n  text-align: center;\r\n  top: 0;\r\n  height: 100%;\r\n  width: 50%;\r\n  transform: translateX(0);\r\n  transition: transform 0.6s ease-in-out;\n}\n.overlay-left {\r\n  transform: translateX(-20%);\n}\n.container.right-panel-active .overlay-left {\r\n  transform: translateX(0);\n}\n.overlay-right {\r\n  right: 0;\r\n  transform: translateX(0);\n}\n.container.right-panel-active .overlay-right {\r\n  transform: translateX(20%);\n}\n.social-container {\r\n  margin: 20px 0;\n}\n.social-container a {\r\n  border: 1px solid #DDDDDD;\r\n  border-radius: 50%;\r\n  display: inline-flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  margin: 0 5px;\r\n  height: 40px;\r\n  width: 40px;\n}", ""]);
+exports.push([module.i, "\n* {\r\n  box-sizing: border-box;\n}\n.dbody {\r\n  background: #f6f5f7;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  flex-direction: column;\r\n  font-family: 'Montserrat', sans-serif;\r\n  height: 100vh;\r\n  margin: -20px 0 50px;\n}\nh1 {\r\n  font-weight: bold;\r\n  margin: 0;\n}\nh2 {\r\n  text-align: center;\n}\np {\r\n  font-size: 14px;\r\n  font-weight: 100;\r\n  line-height: 20px;\r\n  letter-spacing: 0.5px;\r\n  margin: 20px 0 30px;\n}\nspan {\r\n  font-size: 12px;\n}\na {\r\n  color: #333;\r\n  font-size: 14px;\r\n  text-decoration: none;\r\n  margin: 15px 0;\n}\nbutton {\r\n  border-radius: 20px;\r\n  border: 1px solid #2ac1da;\r\n  background-color: #2ac1da;\r\n  color: #FFFFFF;\r\n  font-size: 12px;\r\n  font-weight: bold;\r\n  padding: 12px 45px;\r\n  letter-spacing: 1px;\r\n  text-transform: uppercase;\r\n  transition: transform 80ms ease-in;\n}\nbutton:active {\r\n  transform: scale(0.95);\n}\nbutton:focus {\r\n  outline: none;\n}\nbutton.ghost {\r\n  background-color: transparent;\r\n  border-color: #FFFFFF;\n}\n.form {\r\n  background-color: #FFFFFF;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  flex-direction: column;\r\n  padding: 0 50px;\r\n  height: 100%;\r\n  text-align: center;\n}\ninput {\r\n  background-color: #eee;\r\n  border: none;\r\n  padding: 12px 15px;\r\n  margin: 8px 0;\r\n  width: 100%;\n}\n.container {\r\n  background-color: #fff;\r\n  border-radius: 10px;\r\n    box-shadow: 0 14px 28px rgba(0,0,0,0.25), \r\n      0 10px 10px rgba(0,0,0,0.22);\r\n  position: relative;\r\n  overflow: hidden;\r\n  width: 768px;\r\n  max-width: 100%;\r\n  min-height: 480px;\n}\n.form-container {\r\n  position: absolute;\r\n  top: 0;\r\n  height: 100%;\r\n  transition: all 0.6s ease-in-out;\n}\n.sign-in-container {\r\n  left: 0;\r\n  width: 50%;\r\n  z-index: 2;\n}\n.container.right-panel-active .sign-in-container {\r\n  transform: translateX(100%);\n}\n.sign-up-container {\r\n  left: 0;\r\n  width: 50%;\r\n  opacity: 0;\r\n  z-index: 1;\n}\n.container.right-panel-active .sign-up-container {\r\n  transform: translateX(100%);\r\n  opacity: 1;\r\n  z-index: 5;\r\n  animation: show 0.6s;\n}\n@keyframes show {\n0%, 49.99% {\r\n    opacity: 0;\r\n    z-index: 1;\n}\n50%, 100% {\r\n    opacity: 1;\r\n    z-index: 5;\n}\n}\n.overlay-container {\r\n  position: absolute;\r\n  top: 0;\r\n  left: 50%;\r\n  width: 50%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  transition: transform 0.6s ease-in-out;\r\n  z-index: 100;\n}\n.container.right-panel-active .overlay-container{\r\n  transform: translateX(-100%);\n}\n.overlay {\r\n  background: #FF416C;\r\n  background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);\r\n  background: linear-gradient(to right, #3caee4, #41f6ff);\r\n  background-repeat: no-repeat;\r\n  background-size: cover;\r\n  background-position: 0 0;\r\n  color: #FFFFFF;\r\n  position: relative;\r\n  left: -100%;\r\n  height: 100%;\r\n  width: 200%;\r\n    transform: translateX(0);\r\n  transition: transform 0.6s ease-in-out;\n}\n.container.right-panel-active .overlay {\r\n    transform: translateX(50%);\n}\n.overlay-panel {\r\n  position: absolute;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  flex-direction: column;\r\n  padding: 0 40px;\r\n  text-align: center;\r\n  top: 0;\r\n  height: 100%;\r\n  width: 50%;\r\n  transform: translateX(0);\r\n  transition: transform 0.6s ease-in-out;\n}\n.overlay-left {\r\n  transform: translateX(-20%);\n}\n.container.right-panel-active .overlay-left {\r\n  transform: translateX(0);\n}\n.overlay-right {\r\n  right: 0;\r\n  transform: translateX(0);\n}\n.container.right-panel-active .overlay-right {\r\n  transform: translateX(20%);\n}\n.social-container {\r\n  margin: 20px 0;\n}\n.social-container a {\r\n  border: 1px solid #DDDDDD;\r\n  border-radius: 50%;\r\n  display: inline-flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  margin: 0 5px;\r\n  height: 40px;\r\n  width: 40px;\n}", ""]);
 
 // exports
 
@@ -20371,8 +20677,8 @@ var render = function() {
             {
               name: "show",
               rawName: "v-show",
-              value: _vm.data,
-              expression: "data"
+              value: _vm.token,
+              expression: "token"
             }
           ],
           staticClass: "navbar navbar-expand-md navbar-light bg-light"
@@ -20392,18 +20698,7 @@ var render = function() {
             },
             [
               _c("ul", { staticClass: "navbar-nav mr-auto" }, [
-                _c(
-                  "li",
-                  { staticClass: "nav-item active" },
-                  [
-                    _c(
-                      "router-link",
-                      { staticClass: "nav-link", attrs: { to: "/profile" } },
-                      [_vm._v("Home")]
-                    )
-                  ],
-                  1
-                ),
+                _c("li", { staticClass: "nav-item active" }),
                 _vm._v(" "),
                 _c(
                   "li",
@@ -20411,7 +20706,7 @@ var render = function() {
                   [
                     _c(
                       "router-link",
-                      { staticClass: "nav-link", attrs: { to: "/" } },
+                      { staticClass: "nav-link", attrs: { to: "/newcv" } },
                       [_vm._v("Create CV")]
                     )
                   ],
@@ -20424,7 +20719,7 @@ var render = function() {
                   [
                     _c(
                       "router-link",
-                      { staticClass: "nav-link", attrs: { to: "/" } },
+                      { staticClass: "nav-link", attrs: { to: "/mycv" } },
                       [_vm._v("My CV")]
                     )
                   ],
@@ -20448,7 +20743,39 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("router-view")
+      _c("router-view"),
+      _vm._v(" "),
+      _c(
+        "footer",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.token,
+              expression: "token"
+            }
+          ],
+          staticClass: "w3-container w3-teal w3-center w3-margin-top"
+        },
+        [
+          _c("p", [_vm._v("Find me on social media.")]),
+          _vm._v(" "),
+          _c("i", { staticClass: "fa fa-facebook-official w3-hover-opacity" }),
+          _vm._v(" "),
+          _c("i", { staticClass: "fa fa-instagram w3-hover-opacity" }),
+          _vm._v(" "),
+          _c("i", { staticClass: "fa fa-snapchat w3-hover-opacity" }),
+          _vm._v(" "),
+          _c("i", { staticClass: "fa fa-pinterest-p w3-hover-opacity" }),
+          _vm._v(" "),
+          _c("i", { staticClass: "fa fa-twitter w3-hover-opacity" }),
+          _vm._v(" "),
+          _c("i", { staticClass: "fa fa-linkedin w3-hover-opacity" }),
+          _vm._v(" "),
+          _vm._m(1)
+        ]
+      )
     ],
     1
   )
@@ -20470,6 +20797,24 @@ var staticRenderFns = [
       },
       [_c("span", { staticClass: "navbar-toggler-icon" })]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("Powered by "),
+      _c(
+        "a",
+        {
+          attrs: {
+            href: "https://am.linkedin.com/in/eduard-tovmasyan-661298160",
+            target: "_blank"
+          }
+        },
+        [_vm._v("Eduard Tovmasyan")]
+      )
+    ])
   }
 ]
 render._withStripped = true
@@ -20521,28 +20866,62 @@ var render = function() {
     _c("div", { staticClass: "dbody" }, [
       _c("div", { staticClass: "container", attrs: { id: "container" } }, [
         _c("div", { staticClass: "form-container sign-up-container" }, [
-          _c("div", { staticClass: "form" }, [
+          _c("div", { staticClass: "form", attrs: { id: "sign-up-form" } }, [
             _c("h1", [_vm._v("Create Account")]),
             _vm._v(" "),
-            _c("input", { attrs: { type: "text", placeholder: "Name" } }),
-            _vm._v(" "),
-            _c("input", { attrs: { type: "text", placeholder: "Surname" } }),
-            _vm._v(" "),
-            _c("input", { attrs: { type: "email", placeholder: "Email" } }),
+            _vm.errors.signUp.message
+              ? _c("p", { staticClass: "text-danger mt-2 mb-2" }, [
+                  _vm._v(_vm._s(_vm.errors.signUp.message))
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _c("input", {
-              attrs: { type: "password", placeholder: "Password" }
+              attrs: { type: "text", name: "name", placeholder: "Name" }
             }),
             _vm._v(" "),
-            _c("input", { attrs: { type: "date", placeholder: "Birthday" } }),
+            _vm.errors.signUp.name
+              ? _c("span", { staticClass: "input-error" }, [
+                  _vm._v(_vm._s(_vm.errors.signUp.name[0]))
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("input", {
+              attrs: { type: "email", name: "email", placeholder: "Email" }
+            }),
+            _vm._v(" "),
+            _vm.errors.signUp.email
+              ? _c("span", { staticClass: "input-error" }, [
+                  _vm._v(_vm._s(_vm.errors.signUp.email[0]))
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _c("input", {
+              attrs: {
+                type: "password",
+                name: "password",
+                placeholder: "Password"
+              }
+            }),
+            _vm._v(" "),
+            _vm.errors.signUp.password
+              ? _c("span", { staticClass: "input-error" }, [
+                  _vm._v(_vm._s(_vm.errors.signUp.password[0]))
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _c("button", { on: { click: _vm.signup } }, [_vm._v("Sign Up")])
           ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-container sign-in-container" }, [
-          _c("div", { staticClass: "form" }, [
+          _c("div", { staticClass: "form", attrs: { id: "sign-in-form" } }, [
             _c("h1", [_vm._v("Sign In")]),
+            _vm._v(" "),
+            _vm.errors.signIn.message
+              ? _c("p", { staticClass: "text-danger mt-2 mb-2" }, [
+                  _vm._v(_vm._s(_vm.errors.signIn.message))
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _c("input", {
               attrs: {
@@ -20553,6 +20932,12 @@ var render = function() {
               }
             }),
             _vm._v(" "),
+            _vm.errors.signIn.email
+              ? _c("span", { staticClass: "input-error" }, [
+                  _vm._v(_vm._s(_vm.errors.signIn.email[0]))
+                ])
+              : _vm._e(),
+            _vm._v(" "),
             _c("input", {
               attrs: {
                 type: "password",
@@ -20561,6 +20946,12 @@ var render = function() {
                 placeholder: "Password"
               }
             }),
+            _vm._v(" "),
+            _vm.errors.signIn.password
+              ? _c("span", { staticClass: "input-error" }, [
+                  _vm._v(_vm._s(_vm.errors.signIn.password[0]))
+                ])
+              : _vm._e(),
             _vm._v(" "),
             _c("a", { attrs: { href: "#" } }, [
               _vm._v("Forgot your password?")
@@ -20607,6 +20998,762 @@ var staticRenderFns = [
             _vm._v("Sign Up")
           ])
         ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MyCvComponent.vue?vue&type=template&id=1cecc523&":
+/*!****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/MyCvComponent.vue?vue&type=template&id=1cecc523& ***!
+  \****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("div", { staticClass: "w3-light-grey" }, [
+        _c(
+          "div",
+          {
+            staticClass: "w3-content w3-margin-top",
+            staticStyle: { "max-width": "1400px" }
+          },
+          [
+            _c("div", { staticClass: "w3-row-padding" }, [
+              _c("div", { staticClass: "w3-third" }, [
+                _c("div", { staticClass: "w3-white w3-text-grey w3-card-4" }, [
+                  _c("div", { staticClass: "w3-display-container" }, [
+                    _c("img", {
+                      staticStyle: { width: "100%" },
+                      attrs: {
+                        src:
+                          "https://welloflifecenter.com/wp-content/uploads/2019/06/Blossom.jpg",
+                        alt: "Avatar"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "w3-display-bottomleft w3-container w3-text-black"
+                      },
+                      [_c("h2", [_vm._v("Blossom Lee")])]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w3-container" }, [
+                    _c("p", [
+                      _c("i", {
+                        staticClass:
+                          "fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"
+                      }),
+                      _vm._v("Chiropractor")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _c("i", {
+                        staticClass:
+                          "fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"
+                      }),
+                      _vm._v("Pennsylvania, USA")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _c("i", {
+                        staticClass:
+                          "fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"
+                      }),
+                      _vm._v("23blossom89@gmail.com")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _c("i", {
+                        staticClass:
+                          "fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"
+                      }),
+                      _vm._v("13154161688")
+                    ]),
+                    _vm._v(" "),
+                    _c("hr"),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "w3-large" }, [
+                      _c("b", [
+                        _c("i", {
+                          staticClass:
+                            "fa fa-asterisk fa-fw w3-margin-right w3-text-teal"
+                        }),
+                        _vm._v("Skills")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("Diversified Adjusting")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "w3-light-grey w3-round-xlarge w3-small" },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "w3-container w3-center w3-round-xlarge w3-teal",
+                            staticStyle: { width: "100%" }
+                          },
+                          [_vm._v("100%")]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("Clinical Nutrition")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "w3-light-grey w3-round-xlarge w3-small" },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "w3-container w3-center w3-round-xlarge w3-teal",
+                            staticStyle: { width: "100%" }
+                          },
+                          [
+                            _c(
+                              "div",
+                              { staticClass: "w3-center w3-text-white" },
+                              [_vm._v("100%")]
+                            )
+                          ]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v("Advance Biostructural Correction (ABC) Certified")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "w3-light-grey w3-round-xlarge w3-small" },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "w3-container w3-center w3-round-xlarge w3-teal",
+                            staticStyle: { width: "100%" }
+                          },
+                          [_vm._v("100%")]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("ConnecTX Certified")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "w3-light-grey w3-round-xlarge w3-small" },
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "w3-container w3-center w3-round-xlarge w3-teal",
+                            staticStyle: { width: "100%" }
+                          },
+                          [_vm._v("100%")]
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("br"),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "w3-large w3-text-theme" }, [
+                      _c("b", [
+                        _c("i", {
+                          staticClass:
+                            "fa fa-globe fa-fw w3-margin-right w3-text-teal"
+                        }),
+                        _vm._v("Languages")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("English")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "w3-light-grey w3-round-xlarge" },
+                      [
+                        _c("div", {
+                          staticClass: "w3-round-xlarge w3-teal",
+                          staticStyle: { height: "24px", width: "100%" }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("Korean")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "w3-light-grey w3-round-xlarge" },
+                      [
+                        _c("div", {
+                          staticClass: "w3-round-xlarge w3-teal",
+                          staticStyle: { height: "24px", width: "100%" }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("Spanish")]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "w3-light-grey w3-round-xlarge" },
+                      [
+                        _c("div", {
+                          staticClass: "w3-round-xlarge w3-teal",
+                          staticStyle: { height: "24px", width: "25%" }
+                        })
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c("br")
+                  ])
+                ]),
+                _c("br")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "w3-twothird" }, [
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "w3-container w3-card w3-white w3-margin-bottom"
+                  },
+                  [
+                    _c("h2", { staticClass: "w3-text-grey w3-padding-16" }, [
+                      _c("i", {
+                        staticClass:
+                          "fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"
+                      }),
+                      _vm._v("Work Experience")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "w3-container" }, [
+                      _c("h5", { staticClass: "w3-opacity" }, [
+                        _c("b", [_vm._v("Chiropractor / welloflifecenter.com")])
+                      ]),
+                      _vm._v(" "),
+                      _c("h6", { staticClass: "w3-text-teal" }, [
+                        _c("i", {
+                          staticClass: "fa fa-calendar fa-fw w3-margin-right"
+                        }),
+                        _vm._v("Jul 2019 - "),
+                        _c("span", { staticClass: "w3-tag w3-teal w3-round" }, [
+                          _vm._v("Current")
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Assess a patient's medical condition by reviewing their medical history, listening to the patient's concerns, and performing a physical examination"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Analyze the patient's posture, spine, and reflexes"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Conduct tests, including evaluating a patient's posture and taking x rays"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [_vm._v("Identify health problems")]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Provide neuromusculoskeletal therapy, which involves adjusting a patient's spinal column and other joints by hand"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Give additional treatments, such as applying heat or cold to a patient's injured areas"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Advise patients on health and lifestyle issues, such as exercise, nutrition, and sleep habits"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Refer patients to other health care professionals, if needed"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("hr")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "w3-container" }, [
+                      _c("h5", { staticClass: "w3-opacity" }, [
+                        _c("b", [_vm._v("Chiropractic / chiropt4u.com")])
+                      ]),
+                      _vm._v(" "),
+                      _c("h6", { staticClass: "w3-text-teal" }, [
+                        _c("i", {
+                          staticClass: "fa fa-calendar fa-fw w3-margin-right"
+                        }),
+                        _vm._v("Apr 2018 - May 2019")
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Perform chiropractic in multi-DC supervised clinic"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Meticulously review patient medical histories in conjunction with current physical findings, X-ray and\r\n              ultrasound to determine accurate diagnoses"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Effectively treat 20-25 patients daily through a combination of diversified adjustments, activator adjustments,\r\n              drop table, TENS therapy, SOT, soft tissue therapy, Kinesio-tape therapy and rehabilitation exercise education"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Treat patients with personal injuries, automobile accidents, pregnancy and wellness issues with appropriate\r\n              strategies"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Interact professionally with patients by paying close attention to details, carefully considering and reviewing\r\n              complaints, and providing individualized treatment"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("hr")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "w3-container" }, [
+                      _c("h5", { staticClass: "w3-opacity" }, [
+                        _c("b", [
+                          _vm._v(
+                            "Chiropractic Intern / Canandaigua Veteran’s Hospital & St. Joseph's Neighborhood Center, NY "
+                          )
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("h6", { staticClass: "w3-text-teal" }, [
+                        _c("i", {
+                          staticClass: "fa fa-calendar fa-fw w3-margin-right"
+                        }),
+                        _vm._v("Mar 2017 - Mar 2018")
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Practiced chiropractic in multi-DC supervised clinic"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Examined, diagnosed, and treated patients through adjustments, therapeutic treatments and patient education"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Interacted professionally with patients and their family members to encourage sound health care practices"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Used array of techniques such as Flexion distraction and activator techniques to treat veteran patients with\r\n              acute/chronic pain conditions"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Worked under the clinician who specialized in Webster technique"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Specialized in the treatment of pregnant patients using Webster technique to reduce the effects of sacral\r\n              subluxation and/or SI joint dysfunction, and significantly reduced the percentage of post-partum stress"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          "Received compliments for professionalism as a doctor, and attained outstanding hospitality and communication\r\n              skills"
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("hr")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "w3-container w3-card w3-white" }, [
+                  _c("h2", { staticClass: "w3-text-grey w3-padding-16" }, [
+                    _c("i", {
+                      staticClass:
+                        "fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"
+                    }),
+                    _vm._v("Education")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w3-container" }, [
+                    _c("h5", { staticClass: "w3-opacity" }, [
+                      _c("b", [
+                        _vm._v("New York Chiropractic College, Seneca Falls NY")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", { staticClass: "w3-text-teal" }, [
+                      _c("i", {
+                        staticClass: "fa fa-calendar fa-fw w3-margin-right"
+                      }),
+                      _vm._v("2014 - 2017")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [_vm._v("Doctor of Chiropractic")]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v("Master of Science in Applied Clinical Nutrition")
+                    ]),
+                    _vm._v(" "),
+                    _c("hr")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w3-container" }, [
+                    _c("h5", { staticClass: "w3-opacity" }, [
+                      _c("b", [_vm._v("York University, Toronto, Canada")])
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", { staticClass: "w3-text-teal" }, [
+                      _c("i", {
+                        staticClass: "fa fa-calendar fa-fw w3-margin-right"
+                      }),
+                      _vm._v("2009 - 2013")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v("Bachelor of Science.(Honors) in Biology")
+                    ]),
+                    _vm._v(" "),
+                    _c("hr")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("div", { staticClass: "w3-container w3-card w3-white" }, [
+                  _c("h2", { staticClass: "w3-text-grey w3-padding-16" }, [
+                    _c("i", {
+                      staticClass:
+                        "fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"
+                    }),
+                    _vm._v("Volunteer Work")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w3-container" }, [
+                    _c("h5", { staticClass: "w3-opacity" }, [
+                      _c("b", [
+                        _vm._v(
+                          "Praise team member Calvary Vision Church (Blue Bell, PA)"
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", { staticClass: "w3-text-teal" }, [
+                      _c("i", {
+                        staticClass: "fa fa-calendar fa-fw w3-margin-right"
+                      }),
+                      _vm._v("2018 - "),
+                      _c("span", { staticClass: "w3-tag w3-teal w3-round" }, [
+                        _vm._v("Current")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "Serve as a piano accompanist and a singer for opening worship service on Sundays"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("hr")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w3-container" }, [
+                    _c("h5", { staticClass: "w3-opacity" }, [
+                      _c("b", [
+                        _vm._v(
+                          "The Table ministry from Calvary Vision Church (Philadelphia, PA)"
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", { staticClass: "w3-text-teal" }, [
+                      _c("i", {
+                        staticClass: "fa fa-calendar fa-fw w3-margin-right"
+                      }),
+                      _vm._v("2018 - "),
+                      _c("span", { staticClass: "w3-tag w3-teal w3-round" }, [
+                        _vm._v("Current")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "Serve meals and snacks to homeless people every Saturday and pray for their wellbeing"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("hr")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w3-container" }, [
+                    _c("h5", { staticClass: "w3-opacity" }, [
+                      _c("b", [
+                        _vm._v(
+                          "New York Chiropractic College Christian Club (Seneca Falls, NY)"
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", { staticClass: "w3-text-teal" }, [
+                      _c("i", {
+                        staticClass: "fa fa-calendar fa-fw w3-margin-right"
+                      }),
+                      _vm._v("2017 - 2018")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "Bible Study Group Leader: Shared bible verses weekly, prepared fellowship, lead the discussion group, and encouraged the members to live\r\n              a Christian way of life"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "Provided individual counselling to other students who needed emotional and spiritual guidance, and collaboratively sought solutions to overcome difficult circumstances as graduate students"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("hr")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w3-container" }, [
+                    _c("h5", { staticClass: "w3-opacity" }, [
+                      _c("b", [
+                        _vm._v(
+                          "Mission Team (Sal Salvador de Jujuy, Argentina)"
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", { staticClass: "w3-text-teal" }, [
+                      _c("i", {
+                        staticClass: "fa fa-calendar fa-fw w3-margin-right"
+                      }),
+                      _vm._v("May 2013")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "Hospitality Leader: Prepared medicines and essential supplements for the entire mission team, and took responsibility for their wellbeing throughout the mission trip"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "Taught Korean to local teenagers who were interested in Korean culture and music"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("hr")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w3-container" }, [
+                    _c("h5", { staticClass: "w3-opacity" }, [
+                      _c("b", [_vm._v("Mission Team (Cartagena, Colombia)")])
+                    ]),
+                    _vm._v(" "),
+                    _c("h6", { staticClass: "w3-text-teal" }, [
+                      _c("i", {
+                        staticClass: "fa fa-calendar fa-fw w3-margin-right"
+                      }),
+                      _vm._v("May 2013")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "Hospitality Leader: Prepared medicines and first-aid supply prior to the departure and provided genuine care to team members\r\n              during emergency situations"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        "Performed worship dance during local school and orphanage visits"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("hr")
+                  ])
+                ])
+              ])
+            ])
+          ]
+        )
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NewCvComponent.vue?vue&type=template&id=fdc0db96&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/NewCvComponent.vue?vue&type=template&id=fdc0db96& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("div", { staticClass: "w3-light-grey" }, [
+        _c(
+          "div",
+          {
+            staticClass: "w3-content w3-margin-top",
+            staticStyle: { "max-width": "1400px" }
+          },
+          [
+            _c("div", { staticClass: "w3-row-padding" }),
+            _vm._v(" "),
+            _c("div", {}, [
+              _c(
+                "div",
+                {
+                  staticClass: "w3-container w3-card w3-white w3-margin-bottom"
+                },
+                [
+                  _c("h2", { staticClass: "w3-text-grey w3-padding-16" }, [
+                    _c("i", {
+                      staticClass:
+                        "fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"
+                    }),
+                    _vm._v("Create CV")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "w3-container" }, [
+                    _c("h5", { staticClass: "w3-opacity" }, [
+                      _c("b", [_vm._v("Tell Us About Yourself")])
+                    ]),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "name" } }, [_vm._v("Name*")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: { type: "text", id: "name", name: "name" }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "surname" } }, [
+                      _vm._v("Surname*")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: { type: "text", id: "surname", name: "surname" }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "phone" } }, [_vm._v("Phone")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: { type: "text", id: "phone", name: "phone" }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "email" } }, [
+                      _vm._v("Email*")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: { type: "email", id: "email", name: "email" }
+                    }),
+                    _vm._v(" "),
+                    _c("label", { attrs: { for: "birthday" } }, [
+                      _vm._v("Birthday*")
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: { type: "date", id: "birthday", name: "birthday" }
+                    }),
+                    _vm._v(" "),
+                    _c("hr")
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("br")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "text-center p-5" }, [
+              _c("button", {}, [_vm._v("Create")])
+            ])
+          ]
+        )
       ])
     ])
   }
@@ -35880,7 +37027,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _Menu__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Menu */ "./resources/js/Menu.vue");
 /* harmony import */ var _components_LoginComponent_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/LoginComponent.vue */ "./resources/js/components/LoginComponent.vue");
-/* harmony import */ var _components_DashboardComponent_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/DashboardComponent.vue */ "./resources/js/components/DashboardComponent.vue");
+/* harmony import */ var _components_DashboardComponent_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/DashboardComponent.vue */ "./resources/js/components/DashboardComponent.vue");
+/* harmony import */ var _components_NewCvComponent_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/NewCvComponent.vue */ "./resources/js/components/NewCvComponent.vue");
+/* harmony import */ var _components_MyCvComponent_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/MyCvComponent.vue */ "./resources/js/components/MyCvComponent.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
@@ -35892,6 +37041,8 @@ Vue.use(vue_axios__WEBPACK_IMPORTED_MODULE_1___default.a, axios__WEBPACK_IMPORTE
 
 
 
+
+
 var r = [{
   path: '/home',
   component: _Menu__WEBPACK_IMPORTED_MODULE_3__["default"]
@@ -35900,7 +37051,13 @@ var r = [{
   component: _components_LoginComponent_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
 }, {
   path: '/profile',
-  component: _components_DashboardComponent_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
+  component: _components_DashboardComponent_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+}, {
+  path: '/newcv',
+  component: _components_NewCvComponent_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
+}, {
+  path: '/mycv',
+  component: _components_MyCvComponent_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   routes: r,
@@ -36095,6 +37252,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LoginComponent_vue_vue_type_template_id_4d2414bf___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LoginComponent_vue_vue_type_template_id_4d2414bf___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/MyCvComponent.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/components/MyCvComponent.vue ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _MyCvComponent_vue_vue_type_template_id_1cecc523___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MyCvComponent.vue?vue&type=template&id=1cecc523& */ "./resources/js/components/MyCvComponent.vue?vue&type=template&id=1cecc523&");
+/* harmony import */ var _MyCvComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MyCvComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/MyCvComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _MyCvComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _MyCvComponent_vue_vue_type_template_id_1cecc523___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _MyCvComponent_vue_vue_type_template_id_1cecc523___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/MyCvComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/MyCvComponent.vue?vue&type=script&lang=js&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/components/MyCvComponent.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MyCvComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./MyCvComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MyCvComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MyCvComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/MyCvComponent.vue?vue&type=template&id=1cecc523&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/MyCvComponent.vue?vue&type=template&id=1cecc523& ***!
+  \**********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MyCvComponent_vue_vue_type_template_id_1cecc523___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./MyCvComponent.vue?vue&type=template&id=1cecc523& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/MyCvComponent.vue?vue&type=template&id=1cecc523&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MyCvComponent_vue_vue_type_template_id_1cecc523___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MyCvComponent_vue_vue_type_template_id_1cecc523___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/NewCvComponent.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/NewCvComponent.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _NewCvComponent_vue_vue_type_template_id_fdc0db96___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NewCvComponent.vue?vue&type=template&id=fdc0db96& */ "./resources/js/components/NewCvComponent.vue?vue&type=template&id=fdc0db96&");
+/* harmony import */ var _NewCvComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NewCvComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/NewCvComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _NewCvComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _NewCvComponent_vue_vue_type_template_id_fdc0db96___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _NewCvComponent_vue_vue_type_template_id_fdc0db96___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/NewCvComponent.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/NewCvComponent.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/NewCvComponent.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewCvComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./NewCvComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NewCvComponent.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NewCvComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/NewCvComponent.vue?vue&type=template&id=fdc0db96&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/NewCvComponent.vue?vue&type=template&id=fdc0db96& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewCvComponent_vue_vue_type_template_id_fdc0db96___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./NewCvComponent.vue?vue&type=template&id=fdc0db96& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/NewCvComponent.vue?vue&type=template&id=fdc0db96&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewCvComponent_vue_vue_type_template_id_fdc0db96___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NewCvComponent_vue_vue_type_template_id_fdc0db96___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

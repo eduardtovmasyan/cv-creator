@@ -3,21 +3,26 @@
 <div class="dbody">
     <div class="container" id="container">
     <div class="form-container sign-up-container">
-        <div class="form">
+        <div id="sign-up-form" class="form">
             <h1>Create Account</h1>
-            <input type="text" placeholder="Name" />
-            <input type="text" placeholder="Surname" />
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <input type="date" placeholder="Birthday" />
+            <p class="text-danger mt-2 mb-2" v-if="errors.signUp.message">{{ errors.signUp.message }}</p>
+            <input type="text" name="name" placeholder="Name" />
+            <span class="input-error" v-if="errors.signUp.name">{{ errors.signUp.name[0] }}</span>
+            <input type="email" name="email" placeholder="Email" />
+            <span class="input-error" v-if="errors.signUp.email">{{ errors.signUp.email[0] }}</span>
+            <input type="password" name="password" placeholder="Password" />
+            <span class="input-error" v-if="errors.signUp.password">{{ errors.signUp.password[0] }}</span>
             <button @click = "signup">Sign Up</button>
         </div>
     </div>
     <div class="form-container sign-in-container">
-        <div class="form">
+        <div id="sign-in-form" class="form">
             <h1>Sign In</h1>
+            <p class="text-danger mt-2 mb-2" v-if="errors.signIn.message">{{ errors.signIn.message }}</p>
             <input type="email" name="email" id="email" placeholder="Email" />
+            <span class="input-error" v-if="errors.signIn.email">{{ errors.signIn.email[0] }}</span>
             <input type="password" name="password" id="password" placeholder="Password" />
+            <span class="input-error" v-if="errors.signIn.password">{{ errors.signIn.password[0] }}</span>
             <a href="#">Forgot your password?</a>
             <button @click = "signin">Sign In</button>
         </div>
@@ -44,13 +49,34 @@
     export default{
         data() {
             return {
-                data: localStorage.getItem('bearerToken'),
+                signInForm: null,
+                signUpForm: null,
+                errors: {
+                    signIn: {},
+                    signUp: {},
+                },
             }
+        },
+        mounted() {
+            this.signInForm = document.getElementById('sign-in-form');
+            this.signUpForm = document.getElementById('sign-up-form');
+
+            const signUpButton = document.getElementById('signUp');
+            const signInButton = document.getElementById('signIn');
+            const container = document.getElementById('container');
+
+            signUpButton.addEventListener('click', () => {
+                container.classList.add("right-panel-active");
+            });
+
+            signInButton.addEventListener('click', () => {
+                container.classList.remove("right-panel-active");
+            });
         },
         methods: {
             signin(e) {
-                let email = $(e.target).prev().prev().prev().val()
-                let password = $(e.target).prev().prev().val()
+                const email = this.signInForm.querySelector('input[name="email"]').value
+                const password = this.signInForm.querySelector('input[name="password"]').value;
 
                 this.axios.post('api/login', {
                     email: email,
@@ -63,28 +89,23 @@
                 })
                 .then(response => {
                     localStorage.setItem('bearerToken', response.data.token);
-                    console.log(localStorage.getItem('bearerToken'));
-                    window.location.href = '/profile';;
+                    window.location.href = '/newcv';;
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    this.errors.signIn = error.response.data.errors || {};
+                    this.errors.signIn.message = error.response.data.message;
                 });
             },
             signup(e) {
-                let name = $(e.target).prev().prev().prev().prev().prev().val()
-                let surname = $(e.target).prev().prev().prev().prev().val()
-                let email = $(e.target).prev().prev().prev().val()
-                let password = $(e.target).prev().prev().val()
-                let birthday = $(e.target).prev().val()
+                const name = this.signUpForm.querySelector('input[name="name"]').value
+                const email = this.signUpForm.querySelector('input[name="email"]').value
+                const password = this.signUpForm.querySelector('input[name="password"]').value;
 
                 this.axios.post('api/user', {
                     email: email,
-                    surname: surname,
                     name: name,
                     password: password,
-                    birthday: birthday,
-                }, 
-                {
+                }, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -93,7 +114,8 @@
                     window.location.href = '/signin';
                 })
                 .catch(error => {
-                    console.log(error.response.data);
+                    this.errors.signUp = error.response.data.errors || {};
+                    this.errors.signUp.message = error.response.data.message;
                 });
             },
         }

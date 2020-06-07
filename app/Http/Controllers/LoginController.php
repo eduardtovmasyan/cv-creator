@@ -21,7 +21,7 @@ class LoginController extends Controller
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response([
-                'message' => ['These credentials do not match our records.']
+                'message' => 'These credentials do not match our records.'
             ], 422);
         } else {
             $token = $user->createToken('cv-creater-token')->accessToken;
@@ -33,5 +33,11 @@ class LoginController extends Controller
 
             return response($response);
         }
+    }
+
+    public function logOut(Request $request)
+    {
+        $request->user()->token()->revoke();
+        $request->user()->token()->delete();
     }
 }

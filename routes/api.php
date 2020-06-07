@@ -24,4 +24,6 @@ Route::group(['middleware' => ['auth:api']], function() {
     Route::resource('resume', 'ResumeController', [
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
+
+    Route::post('/logout', 'LoginController@logOut');
 });

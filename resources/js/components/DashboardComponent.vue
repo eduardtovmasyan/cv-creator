@@ -7,7 +7,7 @@
     export default{
         data() {
             return {
-                data: localStorage.getItem('bearerToken'),
+                
             }
         },
         methods: {

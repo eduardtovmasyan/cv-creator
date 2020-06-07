@@ -1,6 +1,6 @@
 <template>
 <div>
-  <nav v-show="data" class="navbar navbar-expand-md navbar-light bg-light">
+  <nav v-show="token" class="navbar navbar-expand-md navbar-light bg-light">
     <a class="navbar-brand" href="#">Navbar</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
     <span class="navbar-toggler-icon"></span>
@@ -8,13 +8,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <router-link to = '/profile' class="nav-link">Home</router-link>
+          <!-- <router-link to = '/profile' class="nav-link">Home</router-link> -->
         </li>
         <li class="nav-item">
-          <router-link to = '/' class="nav-link">Create CV</router-link>
+          <router-link to = '/newcv' class="nav-link">Create CV</router-link>
         </li>
         <li class="nav-item">
-          <router-link to = '/' class="nav-link">My CV</router-link>
+          <router-link to = '/mycv' class="nav-link">My CV</router-link>
         </li>
       </ul>
       <ul class="navbar-nav">
@@ -28,20 +28,38 @@
     </div>
   </nav>
   <router-view></router-view>
+  <footer v-show="token" class="w3-container w3-teal w3-center w3-margin-top">
+      <p>Find me on social media.</p>
+      <i class="fa fa-facebook-official w3-hover-opacity"></i>
+      <i class="fa fa-instagram w3-hover-opacity"></i>
+      <i class="fa fa-snapchat w3-hover-opacity"></i>
+      <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+      <i class="fa fa-twitter w3-hover-opacity"></i>
+      <i class="fa fa-linkedin w3-hover-opacity"></i>
+      <p>Powered by <a href="https://am.linkedin.com/in/eduard-tovmasyan-661298160" target="_blank">Eduard Tovmasyan</a></p>
+    </footer>
 </div>
 </template>
 <script>
-export default {
-  data() {
-    return {
-      data: localStorage.getItem('bearerToken')
+    export default {
+
+        data() {
+            return {
+              token: localStorage.getItem('bearerToken')
+            }
+        },
+
+        methods: {
+
+          logout(e) {
+              this.axios.post('/api/logout', null, {
+                  headers: {'Authorization': 'Bearer ' + this.token}
+              })
+              .then((r) => {
+                 localStorage.removeItem('bearerToken');
+                  window.location.href = '/signin';
+              });     
+          },
+        }
     }
-  },
-  methods: {
-    logout(e) {
-      localStorage.removeItem('bearerToken');
-      window.location.href = '/signin';
-    },
-  }
-}
 </script>
