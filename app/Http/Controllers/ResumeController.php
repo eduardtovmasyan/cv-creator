@@ -35,8 +35,8 @@ class ResumeController extends Controller
     public function store(Request $request)
     {
         Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
             'birthday' => 'required|date|before:18 years ago',
             'email' => 'required|email',
             'phone' => 'nullable|numeric',
@@ -56,13 +56,13 @@ class ResumeController extends Controller
             'languages.*.name' => 'required|string|max:255',
             'languages.*.description' => 'required|string|max:65000',
             'skills' => 'required|array',
-            'skills.*.name' => 'required|string|max:255',
+            'skills.*' => 'required|string|max:255',
         ])->validate();
 
         $resume = Resume::create([
             'user_id' => Auth::id(),
-            'name' => $request->name,
-            'surname' => $request->surname,
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
             'birthday' => $request->birthday,
             'email' => $request->email,
             'phone' => $request->phone,
@@ -74,7 +74,7 @@ class ResumeController extends Controller
         $langModels = [];
 
         foreach ($request->skills as $skill) {
-            $skillModels[] = Skill::make($skill);
+            $skillModels[] = Skill::make(['name' => $skill]);
         }
         $resume->skills()->saveMany($skillModels);
 

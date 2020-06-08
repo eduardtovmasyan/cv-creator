@@ -1,7 +1,7 @@
 <template>
 <div>
-  <nav v-show="token" class="navbar navbar-expand-md navbar-light bg-light">
-    <a class="navbar-brand" href="#">Navbar</a>
+  <nav v-show="token" class="navbar navbar-expand-md navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="/new-cv">Navbar</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
     <span class="navbar-toggler-icon"></span>
     </button>
@@ -11,15 +11,15 @@
           <!-- <router-link to = '/profile' class="nav-link">Home</router-link> -->
         </li>
         <li class="nav-item">
-          <router-link to = '/newcv' class="nav-link">Create CV</router-link>
+          <router-link to = '/new-cv' class="nav-link">Create CV</router-link>
         </li>
         <li class="nav-item">
-          <router-link to = '/mycv' class="nav-link">My CV</router-link>
+          <router-link to = '/my-cv' class="nav-link">My CV</router-link>
         </li>
       </ul>
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a @click = "logout" class="nav-link">Log Out</a>
+          <a @click = "logout" class="nav-link" style="cursor: pointer;">Log Out</a>
         </li>
         <li class="nav-item">
           
@@ -28,7 +28,7 @@
     </div>
   </nav>
   <router-view></router-view>
-  <footer v-show="token" class="w3-container w3-teal w3-center w3-margin-top">
+  <footer v-show="token" class="w3-container w3-teal w3-center w3-margin-top ">
       <p>Find me on social media.</p>
       <i class="fa fa-facebook-official w3-hover-opacity"></i>
       <i class="fa fa-instagram w3-hover-opacity"></i>

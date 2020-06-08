@@ -89,7 +89,7 @@
                 })
                 .then(response => {
                     localStorage.setItem('bearerToken', response.data.token);
-                    window.location.href = '/newcv';;
+                    window.location.href = '/new-cv';;
                 })
                 .catch(error => {
                     this.errors.signIn = error.response.data.errors || {};
