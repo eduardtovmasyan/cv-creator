@@ -14,20 +14,22 @@
 
             <div id="information" v-show="info">
             <h5 class="w3-opacity"><b>Tell Us About Yourself</b></h5>
-            <label for="firstname">Firstname*</label>
+            <div v-if="errors">
             <p class="text-danger mt-2 mb-2" v-if="errors.firstname">{{ errors.firstname[0] }}</p>
+            <p class="text-danger mt-2 mb-2" v-if="errors.lastname">{{ errors.lastname[0] }}</p>
+            <p class="text-danger mt-2 mb-2" v-if="errors.phone">{{ errors.phone[0] }}</p>
+            <p class="text-danger mt-2 mb-2" v-if="errors.email">{{ errors.email[0] }}</p>
+            <p class="text-danger mt-2 mb-2" v-if="errors.birthday">{{ errors.birthday[0] }}</p>
+            </div>
+            <label for="firstname">Firstname*</label>
             <input type="text" id="firstname" name="firstname">
             <label for="lastname">Lastname*</label>
-            <p class="text-danger mt-2 mb-2" v-if="errors.lastname">{{ errors.lastname[0] }}</p>
             <input type="text" id="lastname" name="lastname">
             <label for="phone">Phone</label>
-            <p class="text-danger mt-2 mb-2" v-if="errors.phone">{{ errors.phone[0] }}</p>
             <input type="text" id="phone" name="phone">
             <label for="email">Email*</label>
-            <p class="text-danger mt-2 mb-2" v-if="errors.email">{{ errors.email[0] }}</p>
             <input type="email" id="email" name="email">
             <label for="birthday">Birthday*</label>
-            <p class="text-danger mt-2 mb-2" v-if="errors.birthday">{{ errors.birthday[0] }}</p>
             <input type="date" id="birthday" name="birthday">
             <hr>
             </div>
@@ -35,16 +37,19 @@
             <div id="education" v-show="edu">
             <div class="edu">
             <h5 class="w3-opacity"><b>Education</b></button></h5>
+            <div v-if="errors">
+            <p class="text-danger mt-2 mb-2" v-if="errors.educations">{{ errors.educations[0] }}</p>
+            </div>
             <label for="name">Name*</label>
-            <input type="text" id="name" name="name">
+            <input type="text" name="name">
             <label for="facultet">Facultet*</label>
-            <input type="text" id="facultet" name="facultet">
-            <label for="address">Address*</label>
-            <input type="text" id="address" name="address">
+            <input type="text" name="facultet">
+            <label for="place">Address*</label>
+            <input type="text" name="place">
             <label for="start">Start*</label>
-            <input type="date" id="start" name="start">
+            <input type="date" name="start">
             <label for="end">End*</label>
-            <input type="date" id="end" name="end">
+            <input type="date" name="end">
             </div>
             <button @click = "addEducation" type="button" class="float-right fa fa-plus mt-4" aria-hidden="true" id="eduButton"></button>
             <hr>
@@ -53,16 +58,19 @@
             <div id="experience" v-show="exp">
             <div class="work mt-5">
             <h5 class="w3-opacity"><b>Work Experience</b></button></h5>
-            <label for="company">Company*</label>
-            <input type="text" id="company" name="company">
+            <div v-if="errors">
+            <p class="text-danger mt-2 mb-2" v-if="errors.work_places">{{ errors.work_places[0] }}</p>
+            </div>
+            <label for="name">Company*</label>
+            <input type="text" name="name">
             <label for="position">Position*</label>
-            <input type="text" id="position" name="position">
-            <label for="location">Location*</label>
-            <input type="text" id="location" name="location">
+            <input type="text" name="position">
+            <label for="place">Location*</label>
+            <input type="text" name="place">
             <label for="start">Start*</label>
-            <input type="date" id="start" name="start">
+            <input type="date" name="start">
             <label for="end">End*</label>
-            <input type="date" id="end" name="end">
+            <input type="date" name="end">
             </div>
             <button @click = "addWork" type="button" class="float-right fa fa-plus mt-4" aria-hidden="true"></button>
             <hr>
@@ -71,8 +79,11 @@
             <div id="languages" v-show="lang">
             <div class="Languages mt-5">
             <h5 class="w3-opacity"><b>Languages</b></button></h5>
+            <div v-if="errors">
+            <p class="text-danger mt-2 mb-2" v-if="errors.languages">{{ errors.languages[0] }}</p>
+            </div>
             <label for="language">Language*</label>
-            <input type="text" id="language" name="language">
+            <input type="text" name="language">
             <select class="custom-select">
               <option value="" disabled selected>Choose your option</option>
               <option value="Native">Native</option>
@@ -89,8 +100,11 @@
             <div id="skills" v-show="skill">
             <div class="skills mt-5">
             <h5 class="w3-opacity"><b>Skills</b></button></h5>
+            <div v-if="errors">
+            <p class="text-danger mt-2 mb-2" v-if="errors.skills">{{ errors.skills[0] }}</p>
+            </div>
             <label for="skill">Skill*</label>
-            <input type="text" id="skill" name="skill">
+            <input type="text" name="skill">
             </div>
             <button @click = "addSkill" type="button" class="float-right fa fa-plus mt-4" aria-hidden="true"></button>
             <hr>
@@ -130,15 +144,15 @@ export default{
             <div class="edu">
             <hr style="height:1px;border:none;color:#333;background-color:#333;">
             <label for="name">Name*</label>
-            <input type="text" id="name" name="name">
+            <input type="text" name="name">
             <label for="facultet">Facultet*</label>
-            <input type="text" id="facultet" name="facultet">
-            <label for="address">Address*</label>
-            <input type="text" id="address" name="address">
+            <input type="text" name="facultet">
+            <label for="place">Address*</label>
+            <input type="text" name="place">
             <label for="start">Start*</label>
-            <input type="date" id="start" name="start">
+            <input type="date" name="start">
             <label for="end">End*</label>
-            <input type="date" id="end" name="end">
+            <input type="date" name="end">
             </div>
           `)
         },
@@ -146,16 +160,16 @@ export default{
           $(e.target).before(`
             <div class="work">
             <hr style="height:1px;border:none;color:#333;background-color:#333;">
-            <label for="company">Company*</label>
-            <input type="text" id="company" name="company">
+            <label for="name">Company*</label>
+            <input type="text" name="name">
             <label for="position">Position*</label>
-            <input type="text" id="position" name="position">
-            <label for="location">Location*</label>
-            <input type="text" id="location" name="location">
+            <input type="text" name="position">
+            <label for="place">Location*</label>
+            <input type="text" name="place">
             <label for="start">Start*</label>
-            <input type="date" id="start" name="start">
+            <input type="date" name="start">
             <label for="end">End*</label>
-            <input type="date" id="end" name="end">
+            <input type="date" name="end">
             </div>
           `)
         },
@@ -164,7 +178,7 @@ export default{
             <div class="Languages">
             <hr style="height:1px;border:none;color:#333;background-color:#333;">
             <label for="language">Language*</label>
-            <input type="text" id="language" name="language">
+            <input type="text" name="language">
             <select class="custom-select">
               <option value="" disabled selected>Choose your option</option>
               <option value="Native">Native</option>
@@ -181,7 +195,7 @@ export default{
             <div class="skills">
             <hr style="height:1px;border:none;color:#333;background-color:#333;">
             <label for="skill">Skill*</label>
-            <input type="text" id="skill" name="skill">
+            <input type="text" name="skill">
             </div>
           `)
         },
@@ -223,22 +237,27 @@ export default{
 
           languageBlock.querySelectorAll('.Languages').forEach((languageInfo) => {
             let language = {};
-            let description = {};
 
             languageInfo.querySelectorAll('input[name]').forEach((input) => {
-              language[input.name] = input.value;
+              language['name'] = input.value;
             });
             languageInfo.querySelectorAll('select').forEach((input) => {
-              description['description'] = input.value;
+              language['description'] = input.value;
             });
 
             data.languages.push(language);
-            data.languages.push(description);
           });
 
-          this.data = data
           this.axios.post('api/resume', {
-            data: this.data
+            firstname: data.firstname,
+            lastname: data.lastname,
+            birthday: data.birthday,
+            email: data.email,
+            phone: data.phone,
+            educations: data.educations,
+            work_places : data.work_places,
+            languages: data.languages,
+            skills: data.skills,
           }, 
           {
            headers: {
@@ -251,6 +270,7 @@ export default{
           })
           .catch(error => {
             this.errors = error.response.data.errors;
+            console.log(this.errors)
           });
         },
     }

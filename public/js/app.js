@@ -2429,6 +2429,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2445,16 +2459,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     addEducation: function addEducation(e) {
-      $(e.target).before("\n            <div class=\"edu\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"name\">Name*</label>\n            <input type=\"text\" id=\"name\" name=\"name\">\n            <label for=\"facultet\">Facultet*</label>\n            <input type=\"text\" id=\"facultet\" name=\"facultet\">\n            <label for=\"address\">Address*</label>\n            <input type=\"text\" id=\"address\" name=\"address\">\n            <label for=\"start\">Start*</label>\n            <input type=\"date\" id=\"start\" name=\"start\">\n            <label for=\"end\">End*</label>\n            <input type=\"date\" id=\"end\" name=\"end\">\n            </div>\n          ");
+      $(e.target).before("\n            <div class=\"edu\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"name\">Name*</label>\n            <input type=\"text\" name=\"name\">\n            <label for=\"facultet\">Facultet*</label>\n            <input type=\"text\" name=\"facultet\">\n            <label for=\"place\">Address*</label>\n            <input type=\"text\" name=\"place\">\n            <label for=\"start\">Start*</label>\n            <input type=\"date\" name=\"start\">\n            <label for=\"end\">End*</label>\n            <input type=\"date\" name=\"end\">\n            </div>\n          ");
     },
     addWork: function addWork(e) {
-      $(e.target).before("\n            <div class=\"work\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"company\">Company*</label>\n            <input type=\"text\" id=\"company\" name=\"company\">\n            <label for=\"position\">Position*</label>\n            <input type=\"text\" id=\"position\" name=\"position\">\n            <label for=\"location\">Location*</label>\n            <input type=\"text\" id=\"location\" name=\"location\">\n            <label for=\"start\">Start*</label>\n            <input type=\"date\" id=\"start\" name=\"start\">\n            <label for=\"end\">End*</label>\n            <input type=\"date\" id=\"end\" name=\"end\">\n            </div>\n          ");
+      $(e.target).before("\n            <div class=\"work\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"name\">Company*</label>\n            <input type=\"text\" name=\"name\">\n            <label for=\"position\">Position*</label>\n            <input type=\"text\" name=\"position\">\n            <label for=\"place\">Location*</label>\n            <input type=\"text\" name=\"place\">\n            <label for=\"start\">Start*</label>\n            <input type=\"date\" name=\"start\">\n            <label for=\"end\">End*</label>\n            <input type=\"date\" name=\"end\">\n            </div>\n          ");
     },
     addLanguage: function addLanguage(e) {
-      $(e.target).before("\n            <div class=\"Languages\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"language\">Language*</label>\n            <input type=\"text\" id=\"language\" name=\"language\">\n            <select class=\"custom-select\">\n              <option value=\"\" disabled selected>Choose your option</option>\n              <option value=\"Native\">Native</option>\n              <option value=\"Upper Intermediate\">Upper Intermediate</option>\n              <option value=\"Intermediate\">Intermediate</option>\n              <option value=\"Pre-Intermediate\">Pre-Intermediate</option>\n              <option value=\"Elementary\">Elementary</option>\n            </select>\n            </div>\n          ");
+      $(e.target).before("\n            <div class=\"Languages\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"language\">Language*</label>\n            <input type=\"text\" name=\"language\">\n            <select class=\"custom-select\">\n              <option value=\"\" disabled selected>Choose your option</option>\n              <option value=\"Native\">Native</option>\n              <option value=\"Upper Intermediate\">Upper Intermediate</option>\n              <option value=\"Intermediate\">Intermediate</option>\n              <option value=\"Pre-Intermediate\">Pre-Intermediate</option>\n              <option value=\"Elementary\">Elementary</option>\n            </select>\n            </div>\n          ");
     },
     addSkill: function addSkill(e) {
-      $(e.target).before("\n            <div class=\"skills\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"skill\">Skill*</label>\n            <input type=\"text\" id=\"skill\" name=\"skill\">\n            </div>\n          ");
+      $(e.target).before("\n            <div class=\"skills\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"skill\">Skill*</label>\n            <input type=\"text\" name=\"skill\">\n            </div>\n          ");
     },
     createCV: function createCV() {
       var _this = this;
@@ -2492,19 +2506,24 @@ __webpack_require__.r(__webpack_exports__);
       });
       languageBlock.querySelectorAll('.Languages').forEach(function (languageInfo) {
         var language = {};
-        var description = {};
         languageInfo.querySelectorAll('input[name]').forEach(function (input) {
-          language[input.name] = input.value;
+          language['name'] = input.value;
         });
         languageInfo.querySelectorAll('select').forEach(function (input) {
-          description['description'] = input.value;
+          language['description'] = input.value;
         });
         data.languages.push(language);
-        data.languages.push(description);
       });
-      this.data = data;
       this.axios.post('api/resume', {
-        data: this.data
+        firstname: data.firstname,
+        lastname: data.lastname,
+        birthday: data.birthday,
+        email: data.email,
+        phone: data.phone,
+        educations: data.educations,
+        work_places: data.work_places,
+        languages: data.languages,
+        skills: data.skills
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -2514,6 +2533,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(response);
       })["catch"](function (error) {
         _this.errors = error.response.data.errors;
+        console.log(_this.errors);
       });
     }
   }
@@ -21812,15 +21832,53 @@ var render = function() {
                     [
                       _vm._m(1),
                       _vm._v(" "),
+                      _vm.errors
+                        ? _c("div", [
+                            _vm.errors.firstname
+                              ? _c(
+                                  "p",
+                                  { staticClass: "text-danger mt-2 mb-2" },
+                                  [_vm._v(_vm._s(_vm.errors.firstname[0]))]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.errors.lastname
+                              ? _c(
+                                  "p",
+                                  { staticClass: "text-danger mt-2 mb-2" },
+                                  [_vm._v(_vm._s(_vm.errors.lastname[0]))]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.errors.phone
+                              ? _c(
+                                  "p",
+                                  { staticClass: "text-danger mt-2 mb-2" },
+                                  [_vm._v(_vm._s(_vm.errors.phone[0]))]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.errors.email
+                              ? _c(
+                                  "p",
+                                  { staticClass: "text-danger mt-2 mb-2" },
+                                  [_vm._v(_vm._s(_vm.errors.email[0]))]
+                                )
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.errors.birthday
+                              ? _c(
+                                  "p",
+                                  { staticClass: "text-danger mt-2 mb-2" },
+                                  [_vm._v(_vm._s(_vm.errors.birthday[0]))]
+                                )
+                              : _vm._e()
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c("label", { attrs: { for: "firstname" } }, [
                         _vm._v("Firstname*")
                       ]),
-                      _vm._v(" "),
-                      _vm.errors.firstname
-                        ? _c("p", { staticClass: "text-danger mt-2 mb-2" }, [
-                            _vm._v(_vm._s(_vm.errors.firstname[0]))
-                          ])
-                        : _vm._e(),
                       _vm._v(" "),
                       _c("input", {
                         attrs: {
@@ -21834,12 +21892,6 @@ var render = function() {
                         _vm._v("Lastname*")
                       ]),
                       _vm._v(" "),
-                      _vm.errors.lastname
-                        ? _c("p", { staticClass: "text-danger mt-2 mb-2" }, [
-                            _vm._v(_vm._s(_vm.errors.lastname[0]))
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
                       _c("input", {
                         attrs: {
                           type: "text",
@@ -21852,12 +21904,6 @@ var render = function() {
                         _vm._v("Phone")
                       ]),
                       _vm._v(" "),
-                      _vm.errors.phone
-                        ? _c("p", { staticClass: "text-danger mt-2 mb-2" }, [
-                            _vm._v(_vm._s(_vm.errors.phone[0]))
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
                       _c("input", {
                         attrs: { type: "text", id: "phone", name: "phone" }
                       }),
@@ -21866,12 +21912,6 @@ var render = function() {
                         _vm._v("Email*")
                       ]),
                       _vm._v(" "),
-                      _vm.errors.email
-                        ? _c("p", { staticClass: "text-danger mt-2 mb-2" }, [
-                            _vm._v(_vm._s(_vm.errors.email[0]))
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
                       _c("input", {
                         attrs: { type: "email", id: "email", name: "email" }
                       }),
@@ -21879,12 +21919,6 @@ var render = function() {
                       _c("label", { attrs: { for: "birthday" } }, [
                         _vm._v("Birthday*")
                       ]),
-                      _vm._v(" "),
-                      _vm.errors.birthday
-                        ? _c("p", { staticClass: "text-danger mt-2 mb-2" }, [
-                            _vm._v(_vm._s(_vm.errors.birthday[0]))
-                          ])
-                        : _vm._e(),
                       _vm._v(" "),
                       _c("input", {
                         attrs: {
@@ -21912,7 +21946,53 @@ var render = function() {
                       attrs: { id: "education" }
                     },
                     [
-                      _vm._m(2),
+                      _c("div", { staticClass: "edu" }, [
+                        _vm._m(2),
+                        _vm._v(" "),
+                        _vm.errors
+                          ? _c("div", [
+                              _vm.errors.educations
+                                ? _c(
+                                    "p",
+                                    { staticClass: "text-danger mt-2 mb-2" },
+                                    [_vm._v(_vm._s(_vm.errors.educations[0]))]
+                                  )
+                                : _vm._e()
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "name" } }, [
+                          _vm._v("Name*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", { attrs: { type: "text", name: "name" } }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "facultet" } }, [
+                          _vm._v("Facultet*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          attrs: { type: "text", name: "facultet" }
+                        }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "place" } }, [
+                          _vm._v("Address*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", { attrs: { type: "text", name: "place" } }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "start" } }, [
+                          _vm._v("Start*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", { attrs: { type: "date", name: "start" } }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "end" } }, [
+                          _vm._v("End*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", { attrs: { type: "date", name: "end" } })
+                      ]),
                       _vm._v(" "),
                       _c("button", {
                         staticClass: "float-right fa fa-plus mt-4",
@@ -21942,7 +22022,53 @@ var render = function() {
                       attrs: { id: "experience" }
                     },
                     [
-                      _vm._m(3),
+                      _c("div", { staticClass: "work mt-5" }, [
+                        _vm._m(3),
+                        _vm._v(" "),
+                        _vm.errors
+                          ? _c("div", [
+                              _vm.errors.work_places
+                                ? _c(
+                                    "p",
+                                    { staticClass: "text-danger mt-2 mb-2" },
+                                    [_vm._v(_vm._s(_vm.errors.work_places[0]))]
+                                  )
+                                : _vm._e()
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "name" } }, [
+                          _vm._v("Company*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", { attrs: { type: "text", name: "name" } }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "position" } }, [
+                          _vm._v("Position*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          attrs: { type: "text", name: "position" }
+                        }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "place" } }, [
+                          _vm._v("Location*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", { attrs: { type: "text", name: "place" } }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "start" } }, [
+                          _vm._v("Start*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", { attrs: { type: "date", name: "start" } }),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "end" } }, [
+                          _vm._v("End*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", { attrs: { type: "date", name: "end" } })
+                      ]),
                       _vm._v(" "),
                       _c("button", {
                         staticClass: "float-right fa fa-plus mt-4",
@@ -21968,7 +22094,31 @@ var render = function() {
                       attrs: { id: "languages" }
                     },
                     [
-                      _vm._m(4),
+                      _c("div", { staticClass: "Languages mt-5" }, [
+                        _vm._m(4),
+                        _vm._v(" "),
+                        _vm.errors
+                          ? _c("div", [
+                              _vm.errors.languages
+                                ? _c(
+                                    "p",
+                                    { staticClass: "text-danger mt-2 mb-2" },
+                                    [_vm._v(_vm._s(_vm.errors.languages[0]))]
+                                  )
+                                : _vm._e()
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "language" } }, [
+                          _vm._v("Language*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          attrs: { type: "text", name: "language" }
+                        }),
+                        _vm._v(" "),
+                        _vm._m(5)
+                      ]),
                       _vm._v(" "),
                       _c("button", {
                         staticClass: "float-right fa fa-plus mt-4",
@@ -21994,7 +22144,27 @@ var render = function() {
                       attrs: { id: "skills" }
                     },
                     [
-                      _vm._m(5),
+                      _c("div", { staticClass: "skills mt-5" }, [
+                        _vm._m(6),
+                        _vm._v(" "),
+                        _vm.errors
+                          ? _c("div", [
+                              _vm.errors.skills
+                                ? _c(
+                                    "p",
+                                    { staticClass: "text-danger mt-2 mb-2" },
+                                    [_vm._v(_vm._s(_vm.errors.skills[0]))]
+                                  )
+                                : _vm._e()
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("label", { attrs: { for: "skill" } }, [
+                          _vm._v("Skill*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", { attrs: { type: "text", name: "skill" } })
+                      ]),
                       _vm._v(" "),
                       _c("button", {
                         staticClass: "float-right fa fa-plus mt-4",
@@ -22059,112 +22229,58 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "edu" }, [
-      _c("h5", { staticClass: "w3-opacity" }, [_c("b", [_vm._v("Education")])]),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "name" } }, [_vm._v("Name*")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "text", id: "name", name: "name" } }),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "facultet" } }, [_vm._v("Facultet*")]),
-      _vm._v(" "),
-      _c("input", {
-        attrs: { type: "text", id: "facultet", name: "facultet" }
-      }),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "address" } }, [_vm._v("Address*")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "text", id: "address", name: "address" } }),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "start" } }, [_vm._v("Start*")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "date", id: "start", name: "start" } }),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "end" } }, [_vm._v("End*")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "date", id: "end", name: "end" } })
+    return _c("h5", { staticClass: "w3-opacity" }, [
+      _c("b", [_vm._v("Education")])
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "work mt-5" }, [
-      _c("h5", { staticClass: "w3-opacity" }, [
-        _c("b", [_vm._v("Work Experience")])
+    return _c("h5", { staticClass: "w3-opacity" }, [
+      _c("b", [_vm._v("Work Experience")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h5", { staticClass: "w3-opacity" }, [
+      _c("b", [_vm._v("Languages")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("select", { staticClass: "custom-select" }, [
+      _c("option", { attrs: { value: "", disabled: "", selected: "" } }, [
+        _vm._v("Choose your option")
       ]),
       _vm._v(" "),
-      _c("label", { attrs: { for: "company" } }, [_vm._v("Company*")]),
+      _c("option", { attrs: { value: "Native" } }, [_vm._v("Native")]),
       _vm._v(" "),
-      _c("input", { attrs: { type: "text", id: "company", name: "company" } }),
+      _c("option", { attrs: { value: "Upper Intermediate" } }, [
+        _vm._v("Upper Intermediate")
+      ]),
       _vm._v(" "),
-      _c("label", { attrs: { for: "position" } }, [_vm._v("Position*")]),
+      _c("option", { attrs: { value: "Intermediate" } }, [
+        _vm._v("Intermediate")
+      ]),
       _vm._v(" "),
-      _c("input", {
-        attrs: { type: "text", id: "position", name: "position" }
-      }),
+      _c("option", { attrs: { value: "Pre-Intermediate" } }, [
+        _vm._v("Pre-Intermediate")
+      ]),
       _vm._v(" "),
-      _c("label", { attrs: { for: "location" } }, [_vm._v("Location*")]),
-      _vm._v(" "),
-      _c("input", {
-        attrs: { type: "text", id: "location", name: "location" }
-      }),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "start" } }, [_vm._v("Start*")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "date", id: "start", name: "start" } }),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "end" } }, [_vm._v("End*")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "date", id: "end", name: "end" } })
+      _c("option", { attrs: { value: "Elementary" } }, [_vm._v("Elementary")])
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "Languages mt-5" }, [
-      _c("h5", { staticClass: "w3-opacity" }, [_c("b", [_vm._v("Languages")])]),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "language" } }, [_vm._v("Language*")]),
-      _vm._v(" "),
-      _c("input", {
-        attrs: { type: "text", id: "language", name: "language" }
-      }),
-      _vm._v(" "),
-      _c("select", { staticClass: "custom-select" }, [
-        _c("option", { attrs: { value: "", disabled: "", selected: "" } }, [
-          _vm._v("Choose your option")
-        ]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "Native" } }, [_vm._v("Native")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "Upper Intermediate" } }, [
-          _vm._v("Upper Intermediate")
-        ]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "Intermediate" } }, [
-          _vm._v("Intermediate")
-        ]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "Pre-Intermediate" } }, [
-          _vm._v("Pre-Intermediate")
-        ]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "Elementary" } }, [_vm._v("Elementary")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "skills mt-5" }, [
-      _c("h5", { staticClass: "w3-opacity" }, [_c("b", [_vm._v("Skills")])]),
-      _vm._v(" "),
-      _c("label", { attrs: { for: "skill" } }, [_vm._v("Skill*")]),
-      _vm._v(" "),
-      _c("input", { attrs: { type: "text", id: "skill", name: "skill" } })
+    return _c("h5", { staticClass: "w3-opacity" }, [
+      _c("b", [_vm._v("Skills")])
     ])
   }
 ]
