@@ -25,7 +25,7 @@
             <input type="text" id="firstname" name="firstname">
             <label for="lastname">Lastname*</label>
             <input type="text" id="lastname" name="lastname">
-            <label for="phone">Phone</label>
+            <label for="phone">Phone*</label>
             <input type="text" id="phone" name="phone">
             <label for="email">Email*</label>
             <input type="email" id="email" name="email">

@@ -21901,7 +21901,7 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("label", { attrs: { for: "phone" } }, [
-                        _vm._v("Phone")
+                        _vm._v("Phone*")
                       ]),
                       _vm._v(" "),
                       _c("input", {

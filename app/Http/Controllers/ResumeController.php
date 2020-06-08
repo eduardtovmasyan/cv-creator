@@ -39,7 +39,7 @@ class ResumeController extends Controller
             'lastname' => 'required|string|max:255',
             'birthday' => 'required|date|before:18 years ago',
             'email' => 'required|email',
-            'phone' => 'nullable|numeric',
+            'phone' => 'required|numeric',
             'educations' => 'required|array',
             'educations.*.name' => 'required|string|max:255',
             'educations.*.facultet' => 'required|string|max:255',

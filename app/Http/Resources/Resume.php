@@ -16,8 +16,8 @@ class Resume extends JsonResource
     {
         return [
             'id' => $this->id,
-            'firstname' => $this->name,
-            'lastname' => $this->surname,
+            'firstname' => $this->firstname,
+            'lastname' => $this->lastname,
             'birthday' => $this->birthday,
             'email' => $this->email,
             'phone' => $this->phone,
