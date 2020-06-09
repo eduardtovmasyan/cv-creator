@@ -11,7 +11,6 @@
         <div class="w3-container w3-card w3-white w3-margin-bottom">
           <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Create CV</h2>
           <div class="w3-container">
-
             <div id="information" v-show="info">
             <h5 class="w3-opacity"><b>Tell Us About Yourself</b></h5>
             <div v-if="errors">

@@ -10,7 +10,7 @@ import Login from "./components/AuthComponent.vue"
 import NewCV from "./components/NewCvComponent.vue"
 import MyCV from "./components/MyCvComponent.vue"
 
-let r =[
+let r = [
 	{path: '/home' , component: Menu},
 	{path: '/signin' , component: Login},
 	{path: '/new-cv' , component: NewCV},

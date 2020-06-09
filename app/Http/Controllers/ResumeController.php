@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
+use Storage;
 use App\Skill;
 use Validator;
 use App\Resume;
@@ -99,12 +101,20 @@ class ResumeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Resume  $resume
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Resume $resume)
+    public function show($id)
     {
-        //
+        $resume = Resume::where('user_id', $id)
+        ->with('skills')
+        ->with('languages')
+        ->with('educationEstablishments')
+        ->with('workPlaces')
+        ->orderBy('id', 'desc')
+        ->first();
+
+        return ResumeResource::make($resume);
     }
 
     /**
@@ -128,5 +138,18 @@ class ResumeController extends Controller
     public function destroy(Resume $resume)
     {
         //
+    }
+
+    public function exportPDF()
+    {
+        $user = Auth::user();
+        $cv = $user->resumes()->orderBy('created_at', 'desc')->first();
+        $data = ['resume' => $cv];
+        $time = time();
+        $pdf = PDF::loadView('cv', $data)->output();
+        $fileName = "cv-{$time}.pdf";
+        Storage::disk('public')->put($fileName, $pdf);
+
+        return asset("storage/{$fileName}");
     }
 }

@@ -1,227 +1,164 @@
-
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
-
-* {
-  box-sizing: border-box;
+#cv-wrapper {
+  font-size: 100.01%;
+  font: normal 0.75em/1.5 "Georgia", "Times New Roman", serif;
+  max-width: 1000px;
 }
 
-body {
-  background: #f6f5f7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-family: 'Montserrat', sans-serif;
-  height: 100vh;
-  margin: -20px 0 50px;
+#cv-wrapper h1,
+#cv-wrapper h2,
+#cv-wrapper h3,
+#cv-wrapper h4,
+#cv-wrapper h5,
+#cv-wrapper h6 {
+  color: #111;
+  font-family: "Tahoma", "Helvetica", "Droid Sans", sans-serif; letter-spacing: 1px;
 }
 
-h1 {
-  font-weight: bold;
-  margin: 0;
+#cv-wrapper h1 {
+  border-bottom: 0.07142855em double #444; color: #000; font: normal 3.5em/2 "Georgia", sans-serif; text-align: center;
 }
 
-h2 {
-  text-align: center;
+#cv-wrapper h2 {
+  color: #000;
+  font-size: 1.5em; letter-spacing: 0.07142855em; font-variant: small-caps;
 }
 
-p {
-  font-size: 14px;
-  font-weight: 100;
-  line-height: 20px;
-  letter-spacing: 0.5px;
-  margin: 20px 0 30px;
+#cv-wrapper h3 {
+  border-bottom: 0.07142855em solid #333;
+  font-size: 1.25em;
+  line-height: 1.42857em;
+  margin-bottom: 0.375em;
+  margin-top: 1.05357em;
+  position: relative;
 }
 
-span {
-  font-size: 12px;
+#cv-wrapper h4 {
+  font-size: 1.1255em;
+  line-height: 1.2857em;
+  margin-bottom: 0.375em;
+  margin-top: 1.0893em;
 }
 
-a {
-  color: #333;
-  font-size: 14px;
+#cv-wrapper p {margin-bottom: 0.5em; margin-top: 1em;}
+#cv-wrapper p + p {margin-top: 1.5em;}
+#cv-wrapper p + ul {margin-top: 0.75em;}
+#cv-wrapper footer p, #cv-wrapper footer p + p {margin: 0;}
+
+#cv-wrapper header, #cv-wrapper footer {clear: both;}
+#cv-wrapper header h2, #cv-wrapper header p {padding: 0 40px; width: 510px;}
+#cv-wrapper header h1 {text-shadow: 2px 3px 2px #999;}
+
+#cv-wrapper .page {background: #fff; border: 0.07142855em solid #CECECE; margin: 0.35714286em auto 1em; padding-bottom: 1.5em; position: absolute; width: 960px;}
+
+#cv-wrapper .time {font-size: 0.75em; font-weight: normal; float: right; margin-top: 0; padding-top: 0; position: absolute; right: 0;}
+
+#cv-wrapper ul {margin: 0 2em 0.857em;}
+#cv-wrapper ul li {list-style-type: square; position: relative;}
+#cv-wrapper .technology li > span {display: none;}
+
+#cv-wrapper a:link,
+#cv-wrapper a:active,
+#cv-wrapper a:focus,
+#cv-wrapper a:visited,
+#cv-wrapper a:hover {
+  color: #444;
   text-decoration: none;
-  margin: 15px 0;
 }
 
-button {
-  border-radius: 20px;
-  border: 1px solid #FF4B2B;
-  background-color: #FF4B2B;
-  color: #FFFFFF;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 12px 45px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: transform 80ms ease-in;
+@media screen and (min-width: 320px) {
+    #cv-wrapper {margin: 0; padding: 0; text-shadow: none;}
+    #cv-wrapper header,
+    #cv-wrapper header h2,
+    #cv-wrapper header p,
+    #cv-wrapper .page,
+    #cv-wrapper footer {
+      background: #fff;
+      margin: 0 auto;
+      padding: 0;
+      width: 93.75%;
+    }
+    #cv-wrapper header {margin-bottom: 1em;}
+    #cv-wrapper header h2, #cv-wrapper header p {margin-left: 0; padding-left: 0;}
+    #cv-wrapper .page .resume_content,
+    #cv-wrapper .page .resume_skills {
+      float: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    } 
+    #cv-wrapper article,
+    #cv-wrapper aside,
+    #cv-wrapper .vcard {
+      margin: 0 10px;
+      padding: 0;
+    }
+    #cv-wrapper footer {font-size: inherit !important;}
+    #cv-wrapper footer {margin-bottom: 1em;}
+    #cv-wrapper .vcard {border: none; background-color: #fff; display: none; margin: 1em 10px 1em -3px !important; position: inherit; width: 100%;}
+    #cv-wrapper .vcard p {padding: 0 10px 0 0; }
+    #cv-wrapper .vcard h3 {display: block;}
+    #cv-wrapper .vcard strong {display: inline-block;}
 }
 
-button:active {
-  transform: scale(0.95);
-}
+@media screen and (min-width: 767px) {
+    .page {border: none !important; color: #444 !important; text-shadow: none !important; filter:none !important; margin: 0; padding: 0; -ms-filter: none !important; background: #fff; margin: 0.35714286em auto 1em; position: relative; width: 93.75%;}
+  #cv-wrapper .page .resume_content {float: left; margin-bottom: 0.35714286em; margin-top: 1em; width: 570px;}
+  #cv-wrapper .page .resume_skills {float: right; margin-top: 1em; width: 350px;}
 
-button:focus {
-  outline: none;
-}
-
-button.ghost {
-  background-color: transparent;
-  border-color: #FFFFFF;
-}
-
-form {
-  background-color: #FFFFFF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 50px;
-  height: 100%;
-  text-align: center;
-}
-
-input {
-  background-color: #eee;
-  border: none;
-  padding: 12px 15px;
-  margin: 8px 0;
-  width: 100%;
-}
-
-.container {
-  background-color: #fff;
-  border-radius: 10px;
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-      0 10px 10px rgba(0,0,0,0.22);
-  position: relative;
-  overflow: hidden;
-  width: 768px;
-  max-width: 100%;
-  min-height: 480px;
-}
-
-.form-container {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  transition: all 0.6s ease-in-out;
-}
-
-.sign-in-container {
-  left: 0;
-  width: 50%;
-  z-index: 2;
-}
-
-.container.right-panel-active .sign-in-container {
-  transform: translateX(100%);
-}
-
-.sign-up-container {
-  left: 0;
-  width: 50%;
-  opacity: 0;
-  z-index: 1;
-}
-
-.container.right-panel-active .sign-up-container {
-  transform: translateX(100%);
-  opacity: 1;
-  z-index: 5;
-  animation: show 0.6s;
-}
-
-@keyframes show {
-  0%, 49.99% {
-    opacity: 0;
-    z-index: 1;
-  }
+#cv-wrapper article {margin: 0 20px 0 40px; position: relative;}
+#cv-wrapper aside {margin: 0 40px 0 20px; position: relative;}
+#cv-wrapper aside h2 {margin-bottom: 1.05357em;}
   
-  50%, 100% {
-    opacity: 1;
-    z-index: 5;
-  }
-}
 
-.overlay-container {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 50%;
-  height: 100%;
-  overflow: hidden;
-  transition: transform 0.6s ease-in-out;
-  z-index: 100;
+  .page .resume_content {float: left; margin-bottom: 0.35714286em; width: 61.45833%;}
+  .page .resume_skills {float: right; width: 34.375%;}
+    #cv-wrapper header p {width: 57.291667%}
+    #cv-wrapper .vcard {
+      background-color: #EAEAEA;
+      border: 1px solid #DEDEDE;
+      box-shadow: 2px 3px 6px #999;
+      left: 66.145833%;
+      margin: 10px;
+      padding: 6px 10px;
+      position: absolute;
+      width: 26.666667%; 
+      top:  9.0625em; 
+    }
+  #cv-wrapper .vcard h3,
+  #cv-wrapper .vcard strong {display: none;}
+  #cv-wrapper b {font-weight: normal; margin-top: -2px; padding-top: 0; position: absolute; right: 0;}
+  #cv-wrapper h3 + p { max-width: 75%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 }
+@media print {
+    @page { margin: 0.5cm; }
 
-.container.right-panel-active .overlay-container{
-  transform: translateX(-100%);
-}
+    #cv-wrapper {
+        font: 12pt Georgia, "Times New Roman", Times, serif;
+        line-height: 1.3;
+    }
 
-.overlay {
-  background: #FF416C;
-  background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-  background: linear-gradient(to right, #FF4B2B, #FF416C);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 0 0;
-  color: #FFFFFF;
-  position: relative;
-  left: -100%;
-  height: 100%;
-  width: 200%;
-    transform: translateX(0);
-  transition: transform 0.6s ease-in-out;
-}
+    .page, .page .resume_content, .page .resume_skills, #cv-wrapper article, #cv-wrapper aside, #cv-wrapper header h2, #cv-wrapper header p {
+    background-image: none;
+    border: none;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-indent: inherit !important;
+    width: auto !important;
+    }
+    #cv-wrapper .vcard {border: none; background-color: #fff; margin-left: 0; margin-top: 0; padding-left: 0; position: inherit !important; width: 100%;}
+    #cv-wrapper .vcard h3, #cv-wrapper .vcard strong {display: inline-block;}
+    
+    #cv-wrapper header h1 {font-size: 30pt;}
 
-.container.right-panel-active .overlay {
-    transform: translateX(50%);
-}
-
-.overlay-panel {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 40px;
-  text-align: center;
-  top: 0;
-  height: 100%;
-  width: 50%;
-  transform: translateX(0);
-  transition: transform 0.6s ease-in-out;
-}
-
-.overlay-left {
-  transform: translateX(-20%);
-}
-
-.container.right-panel-active .overlay-left {
-  transform: translateX(0);
-}
-
-.overlay-right {
-  right: 0;
-  transform: translateX(0);
-}
-
-.container.right-panel-active .overlay-right {
-  transform: translateX(20%);
-}
-
-.social-container {
-  margin: 20px 0;
-}
-
-.social-container a {
-  border: 1px solid #DDDDDD;
-  border-radius: 50%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 5px;
-  height: 40px;
-  width: 40px;
+    #cv-wrapper h1 {font-size: 24pt;}
+    #cv-wrapper h2 {font-size: 14pt; margin-top: 25px;}
+    
+    #cv-wrapper a, #cv-wrapper a:visited { color: #444 !important; text-decoration: underline; }
+    #cv-wrapper abbr[title]:after { content: " (" attr(title) ")"; }
+    
+    #cv-wrapper p a[href^="http://"]:after {
+        content: " (" attr(href) ")";
+        font-size: 90%;
+    }
 }

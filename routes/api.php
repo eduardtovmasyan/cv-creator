@@ -25,5 +25,7 @@ Route::group(['middleware' => ['auth:api']], function() {
         'only' => ['index', 'store', 'show', 'update', 'destroy']
     ]);
 
+    Route::get('/download', 'ResumeController@exportPDF');
+    
     Route::post('/logout', 'LoginController@logOut');
 });

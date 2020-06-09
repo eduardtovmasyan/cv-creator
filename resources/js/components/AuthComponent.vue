@@ -89,7 +89,8 @@
                 })
                 .then(response => {
                     localStorage.setItem('bearerToken', response.data.token);
-                    window.location.href = '/new-cv';;
+                    localStorage.setItem('user_id', response.data.user.id);
+                    window.location.href = '/new-cv';
                 })
                 .catch(error => {
                     this.errors.signIn = error.response.data.errors || {};
