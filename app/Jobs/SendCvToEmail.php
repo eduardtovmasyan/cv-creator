@@ -42,7 +42,7 @@ class SendCvToEmail implements ShouldQueue
     {
         $data = ['resume' => $this->resume];
         $pdf = PDF::loadView('cv', $data)->output();
-        $fileName = "cv-{$cv->id}.pdf";
+        $fileName = "cv-{$this->resume->id}.pdf";
         Storage::disk('public')->put($fileName, $pdf);
         $pdfUrl = asset("storage/{$fileName}");
 

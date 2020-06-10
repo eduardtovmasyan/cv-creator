@@ -13,12 +13,12 @@ class ExportedCv extends Mailable
     /**
      * @var string
      */
-    protected $cvUrl;
+    public $cvUrl;
 
     /**
      * @var string
      */
-    protected $userName;
+    public $userName;
 
     /**
      * Create a new message instance.
@@ -40,6 +40,9 @@ class ExportedCv extends Mailable
      */
     public function build()
     {
-        return $this->view('exported-cv');
+        return $this->view('exported-cv', [
+            'cvUrl' => $this->cvUrl,
+            'userName' => $this->userName,
+        ]);
     }
 }
