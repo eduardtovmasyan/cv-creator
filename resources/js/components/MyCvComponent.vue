@@ -1,59 +1,66 @@
 <template>
-<div style="margin-top: 100px;">
-  <main role="main" id="cv-wrapper">
+<div style="margin-top: 100px;position: relative;">
+  <main role="main" id="cv-wrapper" style="max-width: 800px;top: 0;left: 0;right: 0;bottom: 0;margin: 0 auto;">
   <div class="page">
   <!-- 1. Header -->
   <header>
-      <h1>{{resume.firstname}} {{resume.lastname}}</h1>
+      <h1 style="text-align: center;">{{resume.firstname}} {{resume.lastname}}</h1>
+      <hr>
   </header>
-  <section class="resume_content">
+  <section>
+        <h2 style="text-align: center;">Information</h2>
+        <hr>
+        <ul>
+          <li style="color: #0056b3;">Email: {{resume.email}}</li>
+          <li style="color: #0056b3;">Phone: {{resume.phone}}</li>
+          <li style="color: #009688;">Birthday: {{resume.birthday}}</li>
+        </ul>
+  </section>
+  <section >
     <article>
-
       <section>
-        <h2>Professional Experience</h2>
+        <h2 style="text-align: center;">Professional Experience</h2>
+        <hr>
         <div v-for="exp in resume.workExperience">
-        <h3>{{exp.position}}<span class="time">
-          <time datetime="2003-10-20" class="start">{{exp.start}}</time>
+        <h3><b>Position:</b> {{exp.position}}
+          <time style="color: #009688;" >{{exp.start}}</time>
           &#8211;
-          <time datetime="2007-05-29" class="end">{{exp.end}}</time>
-          </span></h3>
-        <p><strong>{{exp.name}}</strong> <b>{{exp.place}}</b></p>
-        </div>
+          <time style="color: #009688;" >{{exp.end}}</time>
+          </h3>
+        <p><strong>Company: </strong>{{exp.name}} </p>
+        <p><b>Location: </b>{{exp.place}}</p>
+      </div>
       </section>
-
       <section>
-        <h2>Education</h2>
+        <h2 style="text-align: center;">Education</h2>
+        <hr>
         <div v-for="edu in resume.education">
-        <h3>{{edu.facultet}}<span class="time">
-          <time datetime="2003-10-20" class="start">{{edu.start}}</time>
+        <h3><b>Facultet:</b> {{edu.facultet}}
+          <span class="time">
+          <time style="color: #009688;" >{{edu.start}}</time>
           &#8211;
-          <time datetime="2007-05-29" class="end">{{edu.end}}</time>
+          <time style="color: #009688;" >{{edu.end}}</time>
           </span></h3>
-        <p><strong>{{edu.name}}</strong> <b>{{edu.place}}</b></p>
+        <p><strong>School/Institution name: </strong> {{edu.name}} </p>
+        <p><strong>Location: </strong> <b>{{edu.place}}</b></p>
         </div>
       </section>
     </article>
   </section>
-  <div class="resume_skills">
-    <aside>
+  <div >
+    <aside> 
       <section>
-        <h2>Information</h2>
-        <ul>
-          <li><a href="https://codepen.io/jaredpearce/full/iBdxb">{{resume.email}}</a></li>
-          <li><a href="http://mathworks.com/examples" target="_blank">{{resume.phone}}</a></li>
-          <li><a href="http://coursework.mathworks.com" target="_blank">{{resume.birthday}}</a></li>
-        </ul>
-      </section>
-      <section>
-        <h2>Skills</h2>
-        <ul class="technology">
+        <h2 style="text-align: center;">Skills</h2>
+        <hr>
+        <ul >
           <li v-for="skill in resume.skills">{{skill.name}}</li>
         </ul>
       </section>
       <section>
-        <h2>Languages</h2>
-            <div v-for="language in resume.languages">
-            <h3 >{{language.name}}<span class="time">
+        <h2 style="text-align: center;">Languages</h2>
+        <hr>
+        <div v-for="language in resume.languages">
+            <h3>Language: {{language.name}}<span >
                </span></h3>
                <p>{{language.description}}</p>  
             </div>

@@ -31,6 +31,7 @@
             <label for="birthday">Birthday*</label>
             <input type="date" id="birthday" name="birthday">
             <hr>
+            <button @click = "infoNext" class="float-right mb-2">Next</button>
             </div>
 
             <div id="education" v-show="edu">
@@ -50,13 +51,14 @@
             <label for="end">End*</label>
             <input type="date" name="end">
             </div>
-            <button @click = "addEducation" type="button" class="float-right fa fa-plus mt-4" aria-hidden="true" id="eduButton"></button>
+            <button @click = "addEducation" type="button" class="fa fa-plus mt-4 mb-2" aria-hidden="true" id="eduButton"></button>
+             <button @click = "eduNext" class="float-right mt-4 mb-2">Next</button>
             <hr>
             </div>
             
             <div id="experience" v-show="exp">
-            <div class="work mt-5">
-            <h5 class="w3-opacity"><b>Work Experience</b></button></h5>
+            <div class="work">
+            <h5 class="w3-opacity"><b>Professional Experience</b></button></h5>
             <div v-if="errors">
             <p class="text-danger mt-2 mb-2" v-if="errors.work_places">{{ errors.work_places[0] }}</p>
             </div>
@@ -71,12 +73,13 @@
             <label for="end">End*</label>
             <input type="date" name="end">
             </div>
-            <button @click = "addWork" type="button" class="float-right fa fa-plus mt-4" aria-hidden="true"></button>
+            <button @click = "addWork" type="button" class="fa fa-plus mt-4 mb-2" aria-hidden="true"></button>
+            <button @click = "expNext" class="float-right mt-4 mb-2">Next</button>
             <hr>
             </div>
 
             <div id="languages" v-show="lang">
-            <div class="Languages mt-5">
+            <div class="Languages ">
             <h5 class="w3-opacity"><b>Languages</b></button></h5>
             <div v-if="errors">
             <p class="text-danger mt-2 mb-2" v-if="errors.languages">{{ errors.languages[0] }}</p>
@@ -92,12 +95,13 @@
               <option value="Elementary">Elementary</option>
             </select>
             </div>
-            <button @click = "addLanguage" type="button" class="float-right fa fa-plus mt-4" aria-hidden="true"></button>
+            <button @click = "addLanguage" type="button" class="fa fa-plus mt-4 mb-2" aria-hidden="true"></button>
+            <button @click = "langNext" class="float-right mt-4 mb-2">Next</button>
             <hr>
             </div>
 
             <div id="skills" v-show="skill">
-            <div class="skills mt-5">
+            <div class="skills ">
             <h5 class="w3-opacity"><b>Skills</b></button></h5>
             <div v-if="errors">
             <p class="text-danger mt-2 mb-2" v-if="errors.skills">{{ errors.skills[0] }}</p>
@@ -105,7 +109,7 @@
             <label for="skill">Skill*</label>
             <input type="text" name="skill">
             </div>
-            <button @click = "addSkill" type="button" class="float-right fa fa-plus mt-4" aria-hidden="true"></button>
+            <button @click = "addSkill" type="button" class="fa fa-plus mt-4 mb-2" aria-hidden="true"></button>
             <hr>
             </div>
 
@@ -127,11 +131,11 @@ export default{
     data() {
       return {
         info: true,
-        edu: true,
-        exp: true,
-        lang: true,
-        skill: true,
-        creatButton: true,
+        edu: false,
+        exp: false,
+        lang: false,
+        skill: false,
+        creatButton: false,
         data: {},
         token: localStorage.getItem('bearerToken'),
         errors: {},
@@ -271,6 +275,23 @@ export default{
             this.errors = error.response.data.errors;
             console.log(this.errors)
           });
+        },
+        infoNext(){
+          this.info = false;
+          this.edu = true;
+        },
+        eduNext(){
+          this.edu = false;
+          this.exp = true;
+        },
+        expNext(){
+          this.exp = false;
+          this.lang = true;
+        },
+        langNext(){
+          this.lang = false;
+          this.skill = true;
+          this.creatButton = true;
         },
     }
 }

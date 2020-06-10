@@ -45,8 +45,8 @@ class SendCvToEmail implements ShouldQueue
         $fileName = "cv-{$this->resume->id}.pdf";
         Storage::disk('public')->put($fileName, $pdf);
         $pdfUrl = asset("storage/{$fileName}");
-
         $user = $this->resume->user;
+        
         Mail::to($user)->send(
             new ExportedCv($pdfUrl, $user->name)
         );

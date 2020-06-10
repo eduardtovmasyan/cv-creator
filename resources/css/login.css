@@ -226,7 +226,7 @@ input {
   width: 40px;
 }
 /*resume*/
-#cv-wrapper {
+/*#cv-wrapper {
   font-size: 100.01%;
   font: normal 0.75em/1.5 "Georgia", "Times New Roman", serif;
   width: 100%;
@@ -390,4 +390,4 @@ input {
         content: " (" attr(href) ")";
         font-size: 90%;
     }
-}
+}*/
