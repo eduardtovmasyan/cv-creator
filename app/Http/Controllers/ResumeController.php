@@ -9,6 +9,7 @@ use Validator;
 use App\Resume;
 use App\Language;
 use App\WorkPlace;
+use App\Jobs\SendCvToEmail;
 use Illuminate\Http\Request;
 use App\EducationalEstablishment;
 use Illuminate\Support\Facades\Auth;
@@ -16,18 +17,6 @@ use App\Http\Resources\Resume as ResumeResource;
 
 class ResumeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $resumes = Resume::paginate(parent::PER_PAGE);
-
-        return ResumeResource::collection($resumes);
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -48,19 +37,20 @@ class ResumeController extends Controller
             'educations.*.place' => 'required|string|max:255',
             'educations.*.start' => 'required|date',
             'educations.*.end' => 'required|date|after:educations.*.start',
-            'work_places' => 'required|array',
-            'work_places.*.name' => 'required|string|max:255',
-            'work_places.*.position' => 'required|string|max:255',
-            'work_places.*.place' => 'required|string|max:255',
-            'work_places.*.start' => 'required|date',
-            'work_places.*.end' => 'required|date|after:work_places.*.start',
+            'experiences' => 'required|array',
+            'experiences.*.name' => 'required|string|max:255',
+            'experiences.*.position' => 'required|string|max:255',
+            'experiences.*.place' => 'required|string|max:255',
+            'experiences.*.start' => 'required|date',
+            'experiences.*.end' => 'required|date|after:experiences.*.start',
             'languages' => 'required|array',
             'languages.*.name' => 'required|string|max:255',
             'languages.*.description' => 'required|string|max:65000',
             'skills' => 'required|array',
-            'skills.*' => 'required|string|max:255',
+            'skills.*.name' => 'required|string|max:255',
         ])->validate();
 
+        Resume::where('user_id', Auth::id())->delete();
         $resume = Resume::create([
             'user_id' => Auth::id(),
             'firstname' => $request->firstname,
@@ -76,7 +66,7 @@ class ResumeController extends Controller
         $langModels = [];
 
         foreach ($request->skills as $skill) {
-            $skillModels[] = Skill::make(['name' => $skill]);
+            $skillModels[] = Skill::make($skill);
         }
         $resume->skills()->saveMany($skillModels);
 
@@ -85,7 +75,7 @@ class ResumeController extends Controller
         }
         $resume->educationEstablishments()->saveMany($eduModels);
 
-        foreach ($request->work_places as $workPlace) {
+        foreach ($request->experiences as $workPlace) {
             $workModels[] = WorkPlace::make($workPlace);
         }
         $resume->workPlaces()->saveMany($workModels);
@@ -99,57 +89,23 @@ class ResumeController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the user generated resume.
      *
-     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        $resume = Resume::where('user_id', $id)
-        ->with('skills')
-        ->with('languages')
-        ->with('educationEstablishments')
-        ->with('workPlaces')
-        ->orderBy('id', 'desc')
-        ->first();
+        $resume = Resume::where('user_id', Auth::id())->orderBy('id', 'desc')->first();
 
         return ResumeResource::make($resume);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Resume  $resume
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Resume $resume)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Resume  $resume
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Resume $resume)
-    {
-        //
     }
 
     public function exportPDF()
     {
         $user = Auth::user();
         $cv = $user->resumes()->orderBy('created_at', 'desc')->first();
-        $data = ['resume' => $cv];
-        $time = time();
-        $pdf = PDF::loadView('cv', $data)->output();
-        $fileName = "cv-{$time}.pdf";
-        Storage::disk('public')->put($fileName, $pdf);
+        SendCvToEmail::dispatch($cv);
 
-        return asset("storage/{$fileName}");
+        return response(['message' => 'You\'ll recive the CV by the email soon.']);
     }
 }

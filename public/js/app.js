@@ -2176,19 +2176,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      resume: {},
-      user_id: localStorage.getItem('user_id'),
+      resume: null,
       token: localStorage.getItem('bearerToken')
     };
   },
-  mounted: function mounted() {
+  created: function created() {
     var _this = this;
 
-    var id = this.user_id;
-    this.axios.get('api/resume/' + id, {
+    this.axios.get('api/resume', {
       headers: {
         'Authorization': 'Bearer ' + this.token
       }
@@ -2198,12 +2207,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     toPDF: function toPDF(e) {
-      this.axios.get('api/download', {
+      this.axios.get('api/export', {
         headers: {
           'Authorization': 'Bearer ' + this.token
         }
       }).then(function (response) {
-        console.log(response);
+        alert(response.data.message);
       });
     }
   }
@@ -2344,97 +2353,172 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      info: true,
-      edu: true,
-      exp: true,
-      lang: true,
-      skill: true,
-      creatButton: true,
+      sections: {
+        info: true,
+        edu: false,
+        exp: false,
+        lang: false,
+        skill: false
+      },
+      createButton: true,
       data: {},
       token: localStorage.getItem('bearerToken'),
-      errors: {}
+      errors: {},
+      educations: [this.getEducationModel()],
+      experiences: [this.getExperienceModel()],
+      languages: [this.getLanguageModel()],
+      skills: [this.getSkillModel()]
     };
+  },
+  watch: {
+    createButton: function createButton(to, from) {
+      console.log(to, from);
+    },
+    errors: function errors(to) {
+      for (var key in to) {
+        if (key.match(/^educations\..+$/)) {
+          this.showSection('edu');
+          break;
+        } else if (key.match(/^experiences\..+$/)) {
+          this.showSection('exp');
+          break;
+        } else if (key.match(/^languages\..+$/)) {
+          this.showSection('lang');
+          break;
+        } else if (key.match(/^skills\..+$/)) {
+          this.showSection('skill');
+          break;
+        } else {
+          this.showSection('info');
+          break;
+        }
+      }
+    }
   },
   methods: {
     addEducation: function addEducation(e) {
-      $(e.target).before("\n            <div class=\"edu\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"name\">Name*</label>\n            <input type=\"text\" name=\"name\">\n            <label for=\"facultet\">Facultet*</label>\n            <input type=\"text\" name=\"facultet\">\n            <label for=\"place\">Address*</label>\n            <input type=\"text\" name=\"place\">\n            <label for=\"start\">Start*</label>\n            <input type=\"date\" name=\"start\">\n            <label for=\"end\">End*</label>\n            <input type=\"date\" name=\"end\">\n            </div>\n          ");
+      this.educations.push(this.getEducationModel());
     },
     addWork: function addWork(e) {
-      $(e.target).before("\n            <div class=\"work\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"name\">Company*</label>\n            <input type=\"text\" name=\"name\">\n            <label for=\"position\">Position*</label>\n            <input type=\"text\" name=\"position\">\n            <label for=\"place\">Location*</label>\n            <input type=\"text\" name=\"place\">\n            <label for=\"start\">Start*</label>\n            <input type=\"date\" name=\"start\">\n            <label for=\"end\">End*</label>\n            <input type=\"date\" name=\"end\">\n            </div>\n          ");
+      this.experiences.push(this.getExperienceModel());
     },
     addLanguage: function addLanguage(e) {
-      $(e.target).before("\n            <div class=\"Languages\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"language\">Language*</label>\n            <input type=\"text\" name=\"language\">\n            <select class=\"custom-select\">\n              <option value=\"\" disabled selected>Choose your option</option>\n              <option value=\"Native\">Native</option>\n              <option value=\"Upper Intermediate\">Upper Intermediate</option>\n              <option value=\"Intermediate\">Intermediate</option>\n              <option value=\"Pre-Intermediate\">Pre-Intermediate</option>\n              <option value=\"Elementary\">Elementary</option>\n            </select>\n            </div>\n          ");
+      this.languages.push(this.getLanguageModel());
     },
     addSkill: function addSkill(e) {
-      $(e.target).before("\n            <div class=\"skills\">\n            <hr style=\"height:1px;border:none;color:#333;background-color:#333;\">\n            <label for=\"skill\">Skill*</label>\n            <input type=\"text\" name=\"skill\">\n            </div>\n          ");
+      this.skills.push(this.getSkillModel());
+    },
+    getEducationModel: function getEducationModel() {
+      return {
+        name: null,
+        facultet: null,
+        place: null,
+        start: null,
+        end: null
+      };
+    },
+    getExperienceModel: function getExperienceModel() {
+      return {
+        name: null,
+        position: null,
+        place: null,
+        start: null,
+        end: null
+      };
+    },
+    getLanguageModel: function getLanguageModel() {
+      return {
+        name: null,
+        description: null
+      };
+    },
+    getSkillModel: function getSkillModel() {
+      return {
+        name: null
+      };
+    },
+    showSection: function showSection(name) {
+      for (var section in this.sections) {
+        this.sections[section] = section === name;
+      }
     },
     createCV: function createCV() {
       var _this = this;
 
-      var data = {
-        skills: [],
-        educations: [],
-        work_places: [],
-        languages: []
-      };
+      var data = {};
       var mainInfoBlock = document.getElementById('information');
-      var skillsBlock = document.getElementById('skills');
-      var educationBlock = document.getElementById('education');
-      var experienceBlock = document.getElementById('experience');
-      var languageBlock = document.getElementById('languages');
       mainInfoBlock.querySelectorAll('input[name]').forEach(function (input) {
         data[input.name] = input.value;
       });
-      skillsBlock.querySelectorAll('input[name="skill"]').forEach(function (input) {
-        data.skills.push(input.value);
-      });
-      educationBlock.querySelectorAll('.edu').forEach(function (educationInfo) {
-        var education = {};
-        educationInfo.querySelectorAll('input[name]').forEach(function (input) {
-          education[input.name] = input.value;
-        });
-        data.educations.push(education);
-      });
-      experienceBlock.querySelectorAll('.work').forEach(function (experienceInfo) {
-        var workPlace = {};
-        experienceInfo.querySelectorAll('input[name]').forEach(function (input) {
-          workPlace[input.name] = input.value;
-        });
-        data.work_places.push(workPlace);
-      });
-      languageBlock.querySelectorAll('.Languages').forEach(function (languageInfo) {
-        var language = {};
-        languageInfo.querySelectorAll('input[name]').forEach(function (input) {
-          language['name'] = input.value;
-        });
-        languageInfo.querySelectorAll('select').forEach(function (input) {
-          language['description'] = input.value;
-        });
-        data.languages.push(language);
-      });
+      this.createButton = false;
       this.axios.post('api/resume', {
         firstname: data.firstname,
         lastname: data.lastname,
         birthday: data.birthday,
         email: data.email,
         phone: data.phone,
-        educations: data.educations,
-        work_places: data.work_places,
-        languages: data.languages,
-        skills: data.skills
+        educations: this.educations,
+        experiences: this.experiences,
+        languages: this.languages,
+        skills: this.skills
       }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + this.token
         }
       }).then(function (response) {
-        console.log(response);
+        window.location.href = '/my-cv';
       })["catch"](function (error) {
         _this.errors = error.response.data.errors;
-        console.log(_this.errors);
+        _this.createButton = true;
       });
     }
   }
@@ -2473,7 +2557,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 exports.push([module.i, "@import url(https://fonts.googleapis.com/css?family=Montserrat:400,800);", ""]);
 
 // module
-exports.push([module.i, "\n* {\r\n  box-sizing: border-box;\n}\n.dbody {\r\n  background: #f6f5f7;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  flex-direction: column;\r\n  font-family: 'Montserrat', sans-serif;\r\n  height: 100vh;\r\n  margin: -20px 0 50px;\n}\nh1 {\r\n  font-weight: bold;\r\n  margin: 0;\n}\nh2 {\r\n  text-align: center;\n}\np {\r\n  font-size: 14px;\r\n  font-weight: 100;\r\n  line-height: 20px;\r\n  letter-spacing: 0.5px;\r\n  margin: 20px 0 30px;\n}\nspan {\r\n  font-size: 12px;\n}\na {\r\n  color: #333;\r\n  font-size: 14px;\r\n  text-decoration: none;\r\n  margin: 15px 0;\n}\nbutton {\r\n  border-radius: 20px;\r\n  border: 1px solid #2ac1da;\r\n  background-color: #2ac1da;\r\n  color: #FFFFFF;\r\n  font-size: 12px;\r\n  font-weight: bold;\r\n  padding: 12px 45px;\r\n  letter-spacing: 1px;\r\n  text-transform: uppercase;\r\n  transition: transform 80ms ease-in;\n}\nbutton:active {\r\n  transform: scale(0.95);\n}\nbutton:focus {\r\n  outline: none;\n}\nbutton.ghost {\r\n  background-color: transparent;\r\n  border-color: #FFFFFF;\n}\n.form {\r\n  background-color: #FFFFFF;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  flex-direction: column;\r\n  padding: 0 50px;\r\n  height: 100%;\r\n  text-align: center;\n}\ninput {\r\n  background-color: #eee;\r\n  border: none;\r\n  padding: 12px 15px;\r\n  margin: 8px 0;\r\n  width: 100%;\n}\n.container {\r\n  background-color: #fff;\r\n  border-radius: 10px;\r\n    box-shadow: 0 14px 28px rgba(0,0,0,0.25), \r\n      0 10px 10px rgba(0,0,0,0.22);\r\n  position: relative;\r\n  overflow: hidden;\r\n  width: 768px;\r\n  max-width: 100%;\r\n  min-height: 480px;\n}\n.form-container {\r\n  position: absolute;\r\n  top: 0;\r\n  height: 100%;\r\n  transition: all 0.6s ease-in-out;\n}\n.sign-in-container {\r\n  left: 0;\r\n  width: 50%;\r\n  z-index: 2;\n}\n.container.right-panel-active .sign-in-container {\r\n  transform: translateX(100%);\n}\n.sign-up-container {\r\n  left: 0;\r\n  width: 50%;\r\n  opacity: 0;\r\n  z-index: 1;\n}\n.container.right-panel-active .sign-up-container {\r\n  transform: translateX(100%);\r\n  opacity: 1;\r\n  z-index: 5;\r\n  animation: show 0.6s;\n}\n@keyframes show {\n0%, 49.99% {\r\n    opacity: 0;\r\n    z-index: 1;\n}\n50%, 100% {\r\n    opacity: 1;\r\n    z-index: 5;\n}\n}\n.overlay-container {\r\n  position: absolute;\r\n  top: 0;\r\n  left: 50%;\r\n  width: 50%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  transition: transform 0.6s ease-in-out;\r\n  z-index: 100;\n}\n.container.right-panel-active .overlay-container{\r\n  transform: translateX(-100%);\n}\n.overlay {\r\n  background: #FF416C;\r\n  background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);\r\n  background: linear-gradient(to right, #3caee4, #41f6ff);\r\n  background-repeat: no-repeat;\r\n  background-size: cover;\r\n  background-position: 0 0;\r\n  color: #FFFFFF;\r\n  position: relative;\r\n  left: -100%;\r\n  height: 100%;\r\n  width: 200%;\r\n    transform: translateX(0);\r\n  transition: transform 0.6s ease-in-out;\n}\n.container.right-panel-active .overlay {\r\n    transform: translateX(50%);\n}\n.overlay-panel {\r\n  position: absolute;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  flex-direction: column;\r\n  padding: 0 40px;\r\n  text-align: center;\r\n  top: 0;\r\n  height: 100%;\r\n  width: 50%;\r\n  transform: translateX(0);\r\n  transition: transform 0.6s ease-in-out;\n}\n.overlay-left {\r\n  transform: translateX(-20%);\n}\n.container.right-panel-active .overlay-left {\r\n  transform: translateX(0);\n}\n.overlay-right {\r\n  right: 0;\r\n  transform: translateX(0);\n}\n.container.right-panel-active .overlay-right {\r\n  transform: translateX(20%);\n}\n.social-container {\r\n  margin: 20px 0;\n}\n.social-container a {\r\n  border: 1px solid #DDDDDD;\r\n  border-radius: 50%;\r\n  display: inline-flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  margin: 0 5px;\r\n  height: 40px;\r\n  width: 40px;\n}\r\n/*resume*/\n#cv-wrapper {\r\n  font-size: 100.01%;\r\n  font: normal 0.75em/1.5 \"Georgia\", \"Times New Roman\", serif;\r\n  width: 100%;\r\n  height: 100vh;\n}\n#cv-wrapper h1,\r\n#cv-wrapper h2,\r\n#cv-wrapper h3,\r\n#cv-wrapper h4,\r\n#cv-wrapper h5,\r\n#cv-wrapper h6 {\r\n  color: #111;\r\n  font-family: \"Tahoma\", \"Helvetica\", \"Droid Sans\", sans-serif; letter-spacing: 1px;\n}\n#cv-wrapper h1 {\r\n  border-bottom: 0.07142855em double #444; color: #000; font: normal 3.5em/2 \"Georgia\", sans-serif; text-align: center;\n}\n#cv-wrapper h2 {\r\n  color: #000;\r\n  font-size: 1.5em; letter-spacing: 0.07142855em; font-variant: small-caps;\n}\n#cv-wrapper h3 {\r\n  border-bottom: 0.07142855em solid #333;\r\n  font-size: 1.25em;\r\n  line-height: 1.42857em;\r\n  margin-bottom: 0.375em;\r\n  margin-top: 1.05357em;\r\n  position: relative;\n}\n#cv-wrapper h4 {\r\n  font-size: 1.1255em;\r\n  line-height: 1.2857em;\r\n  margin-bottom: 0.375em;\r\n  margin-top: 1.0893em;\n}\n#cv-wrapper p {margin-bottom: 0.5em; margin-top: 1em;}\n#cv-wrapper p + p {margin-top: 1.5em;}\n#cv-wrapper p + ul {margin-top: 0.75em;}\n#cv-wrapper footer p, #cv-wrapper footer p + p {margin: 0;}\n#cv-wrapper header, #cv-wrapper footer {clear: both;}\n#cv-wrapper header h2, #cv-wrapper header p {padding: 0 40px; width: 510px;}\n#cv-wrapper header h1 {text-shadow: 2px 3px 2px #999;}\n#cv-wrapper .page {background: #fff; border: 0.07142855em solid #CECECE; margin: 0.35714286em auto 1em; padding-bottom: 1.5em; position: relative; width: 960px;}\n#cv-wrapper .time {font-size: 0.75em; font-weight: normal; float: right; margin-top: 0; padding-top: 0; position: absolute; right: 0;}\n#cv-wrapper ul {margin: 0 2em 0.857em;}\n#cv-wrapper ul li {list-style-type: square; position: relative;}\n#cv-wrapper .technology li > span {display: none;}\n#cv-wrapper a:link,\r\n#cv-wrapper a:active,\r\n#cv-wrapper a:focus,\r\n#cv-wrapper a:visited,\r\n#cv-wrapper a:hover {\r\n  color: #444;\r\n  text-decoration: none;\n}\n@media screen and (min-width: 320px) {\n#cv-wrapper {margin: 0; padding: 0; text-shadow: none;}\n#cv-wrapper header,\r\n    #cv-wrapper header h2,\r\n    #cv-wrapper header p,\r\n    #cv-wrapper .page,\r\n    #cv-wrapper footer {\r\n      background: #fff;\r\n      margin: 0 auto;\r\n      padding: 0;\r\n      width: 93.75%;\n}\n#cv-wrapper header {margin-bottom: 1em;}\n#cv-wrapper header h2, #cv-wrapper header p {margin-left: 0; padding-left: 0;}\n#cv-wrapper .page .resume_content,\r\n    #cv-wrapper .page .resume_skills {\r\n      float: none;\r\n      margin: 0;\r\n      padding: 0;\r\n      width: 100%;\n}\n#cv-wrapper article,\r\n    #cv-wrapper aside,\r\n    #cv-wrapper .vcard {\r\n      margin: 0 10px;\r\n      padding: 0;\n}\n#cv-wrapper footer {font-size: inherit !important;}\n#cv-wrapper footer {margin-bottom: 1em;}\n#cv-wrapper .vcard {border: none; background-color: #fff; display: none; margin: 1em 10px 1em -3px !important; position: inherit; width: 100%;}\n#cv-wrapper .vcard p {padding: 0 10px 0 0;\n}\n#cv-wrapper .vcard h3 {display: block;}\n#cv-wrapper .vcard strong {display: inline-block;}\n}\n@media screen and (min-width: 767px) {\n.page {border: none !important; color: #444 !important; text-shadow: none !important; filter:none !important; margin: 0; padding: 0; -ms-filter: none !important; background: #fff; margin: 0.35714286em auto 1em; position: relative; width: 93.75%;}\n#cv-wrapper .page .resume_content {float: left; margin-bottom: 0.35714286em; margin-top: 1em; width: 570px;}\n#cv-wrapper .page .resume_skills {float: right; margin-top: 1em; width: 350px;}\n#cv-wrapper article {margin: 0 20px 0 40px; position: relative;}\n#cv-wrapper aside {margin: 0 40px 0 20px; position: relative;}\n#cv-wrapper aside h2 {margin-bottom: 1.05357em;}\n.page .resume_content {float: left; margin-bottom: 0.35714286em; width: 61.45833%;}\n.page .resume_skills {float: right; width: 34.375%;}\n#cv-wrapper header p {width: 57.291667%}\n#cv-wrapper .vcard {\r\n      background-color: #EAEAEA;\r\n      border: 1px solid #DEDEDE;\r\n      box-shadow: 2px 3px 6px #999;\r\n      left: 66.145833%;\r\n      margin: 10px;\r\n      padding: 6px 10px;\r\n      position: absolute;\r\n      width: 26.666667%; \r\n      top:  9.0625em;\n}\n#cv-wrapper .vcard h3,\r\n  #cv-wrapper .vcard strong {display: none;}\n#cv-wrapper b {font-weight: normal; margin-top: -2px; padding-top: 0; position: absolute; right: 0;}\n#cv-wrapper h3 + p { max-width: 75%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;\n}\n}\n@media print {\n@page { margin: 0.5cm;\n}\n#cv-wrapper {\r\n        font: 12pt Georgia, \"Times New Roman\", Times, serif;\r\n        line-height: 1.3;\n}\n.page, .page .resume_content, .page .resume_skills, #cv-wrapper article, #cv-wrapper aside, #cv-wrapper header h2, #cv-wrapper header p {\r\n    background-image: none;\r\n    border: none;\r\n    float: none !important;\r\n    margin: 0 !important;\r\n    padding: 0 !important;\r\n    text-indent: inherit !important;\r\n    width: auto !important;\n}\n#cv-wrapper .vcard {border: none; background-color: #fff; margin-left: 0; margin-top: 0; padding-left: 0; position: inherit !important; width: 100%;}\n#cv-wrapper .vcard h3, #cv-wrapper .vcard strong {display: inline-block;}\n#cv-wrapper header h1 {font-size: 30pt;}\n#cv-wrapper h1 {font-size: 24pt;}\n#cv-wrapper h2 {font-size: 14pt; margin-top: 25px;}\n#cv-wrapper a, #cv-wrapper a:visited { color: #444 !important; text-decoration: underline;\n}\n#cv-wrapper abbr[title]:after { content: \" (\" attr(title) \")\";\n}\n#cv-wrapper p a[href^=\"http://\"]:after {\r\n        content: \" (\" attr(href) \")\";\r\n        font-size: 90%;\n}\n}", ""]);
+exports.push([module.i, "\n* {\r\n  box-sizing: border-box;\n}\n.dbody {\r\n  background: #f6f5f7;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  flex-direction: column;\r\n  font-family: 'Montserrat', sans-serif;\r\n  height: 100vh;\r\n  margin: -20px 0 50px;\n}\nh1 {\r\n  font-weight: bold;\r\n  margin: 0;\n}\nh2 {\r\n  text-align: center;\n}\np {\r\n  font-size: 14px;\r\n  font-weight: 100;\r\n  line-height: 20px;\r\n  letter-spacing: 0.5px;\r\n  margin: 20px 0 30px;\n}\nspan {\r\n  font-size: 12px;\n}\na {\r\n  color: #333;\r\n  font-size: 14px;\r\n  text-decoration: none;\r\n  margin: 15px 0;\n}\nbutton {\r\n  border-radius: 20px;\r\n  border: 1px solid #2ac1da;\r\n  background-color: #2ac1da;\r\n  color: #FFFFFF;\r\n  font-size: 12px;\r\n  font-weight: bold;\r\n  padding: 12px 45px;\r\n  letter-spacing: 1px;\r\n  text-transform: uppercase;\r\n  transition: transform 80ms ease-in;\n}\nbutton:active {\r\n  transform: scale(0.95);\n}\nbutton:focus {\r\n  outline: none;\n}\nbutton.ghost {\r\n  background-color: transparent;\r\n  border-color: #FFFFFF;\n}\n.form {\r\n  background-color: #FFFFFF;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  flex-direction: column;\r\n  padding: 0 50px;\r\n  height: 100%;\r\n  text-align: center;\n}\ninput {\r\n  background-color: #eee;\r\n  border: none;\r\n  padding: 12px 15px;\r\n  margin: 8px 0;\r\n  width: 100%;\n}\n.container {\r\n  background-color: #fff;\r\n  border-radius: 10px;\r\n    box-shadow: 0 14px 28px rgba(0,0,0,0.25), \r\n      0 10px 10px rgba(0,0,0,0.22);\r\n  position: relative;\r\n  overflow: hidden;\r\n  width: 768px;\r\n  max-width: 100%;\r\n  min-height: 480px;\n}\n.form-container {\r\n  position: absolute;\r\n  top: 0;\r\n  height: 100%;\r\n  transition: all 0.6s ease-in-out;\n}\n.sign-in-container {\r\n  left: 0;\r\n  width: 50%;\r\n  z-index: 2;\n}\n.container.right-panel-active .sign-in-container {\r\n  transform: translateX(100%);\n}\n.sign-up-container {\r\n  left: 0;\r\n  width: 50%;\r\n  opacity: 0;\r\n  z-index: 1;\n}\n.container.right-panel-active .sign-up-container {\r\n  transform: translateX(100%);\r\n  opacity: 1;\r\n  z-index: 5;\r\n  animation: show 0.6s;\n}\n@keyframes show {\n0%, 49.99% {\r\n    opacity: 0;\r\n    z-index: 1;\n}\n50%, 100% {\r\n    opacity: 1;\r\n    z-index: 5;\n}\n}\n.overlay-container {\r\n  position: absolute;\r\n  top: 0;\r\n  left: 50%;\r\n  width: 50%;\r\n  height: 100%;\r\n  overflow: hidden;\r\n  transition: transform 0.6s ease-in-out;\r\n  z-index: 100;\n}\n.container.right-panel-active .overlay-container{\r\n  transform: translateX(-100%);\n}\n.overlay {\r\n  background: #FF416C;\r\n  background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);\r\n  background: linear-gradient(to right, #3caee4, #41f6ff);\r\n  background-repeat: no-repeat;\r\n  background-size: cover;\r\n  background-position: 0 0;\r\n  color: #FFFFFF;\r\n  position: relative;\r\n  left: -100%;\r\n  height: 100%;\r\n  width: 200%;\r\n    transform: translateX(0);\r\n  transition: transform 0.6s ease-in-out;\n}\n.container.right-panel-active .overlay {\r\n    transform: translateX(50%);\n}\n.overlay-panel {\r\n  position: absolute;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  flex-direction: column;\r\n  padding: 0 40px;\r\n  text-align: center;\r\n  top: 0;\r\n  height: 100%;\r\n  width: 50%;\r\n  transform: translateX(0);\r\n  transition: transform 0.6s ease-in-out;\n}\n.overlay-left {\r\n  transform: translateX(-20%);\n}\n.container.right-panel-active .overlay-left {\r\n  transform: translateX(0);\n}\n.overlay-right {\r\n  right: 0;\r\n  transform: translateX(0);\n}\n.container.right-panel-active .overlay-right {\r\n  transform: translateX(20%);\n}\n.social-container {\r\n  margin: 20px 0;\n}\n.social-container a {\r\n  border: 1px solid #DDDDDD;\r\n  border-radius: 50%;\r\n  display: inline-flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  margin: 0 5px;\r\n  height: 40px;\r\n  width: 40px;\n}\r\n", ""]);
 
 // exports
 
@@ -21054,189 +21138,215 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticStyle: { "margin-top": "100px" } }, [
-    _c("main", { attrs: { role: "main", id: "cv-wrapper" } }, [
-      _c("div", { staticClass: "page" }, [
-        _c("header", [
-          _c("h1", [
-            _vm._v(
-              _vm._s(_vm.resume.firstname) + " " + _vm._s(_vm.resume.lastname)
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("section", { staticClass: "resume_content" }, [
-          _c("article", [
-            _c(
-              "section",
-              [
-                _c("h2", [_vm._v("Professional Experience")]),
-                _vm._v(" "),
-                _vm._l(_vm.resume.workExperience, function(exp) {
-                  return _c("div", [
-                    _c("h3", [
-                      _vm._v(_vm._s(exp.position)),
-                      _c("span", { staticClass: "time" }, [
-                        _c(
-                          "time",
-                          {
-                            staticClass: "start",
-                            attrs: { datetime: "2003-10-20" }
-                          },
-                          [_vm._v(_vm._s(exp.start))]
-                        ),
-                        _vm._v("\r\n          –\r\n          "),
-                        _c(
-                          "time",
-                          {
-                            staticClass: "end",
-                            attrs: { datetime: "2007-05-29" }
-                          },
-                          [_vm._v(_vm._s(exp.end))]
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("p", [
-                      _c("strong", [_vm._v(_vm._s(exp.name))]),
-                      _vm._v(" "),
-                      _c("b", [_vm._v(_vm._s(exp.place))])
-                    ])
-                  ])
-                })
-              ],
-              2
-            ),
-            _vm._v(" "),
-            _c(
-              "section",
-              [
-                _c("h2", [_vm._v("Education")]),
-                _vm._v(" "),
-                _vm._l(_vm.resume.education, function(edu) {
-                  return _c("div", [
-                    _c("h3", [
-                      _vm._v(_vm._s(edu.facultet)),
-                      _c("span", { staticClass: "time" }, [
-                        _c(
-                          "time",
-                          {
-                            staticClass: "start",
-                            attrs: { datetime: "2003-10-20" }
-                          },
-                          [_vm._v(_vm._s(edu.start))]
-                        ),
-                        _vm._v("\r\n          –\r\n          "),
-                        _c(
-                          "time",
-                          {
-                            staticClass: "end",
-                            attrs: { datetime: "2007-05-29" }
-                          },
-                          [_vm._v(_vm._s(edu.end))]
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("p", [
-                      _c("strong", [_vm._v(_vm._s(edu.name))]),
-                      _vm._v(" "),
-                      _c("b", [_vm._v(_vm._s(edu.place))])
-                    ])
-                  ])
-                })
-              ],
-              2
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "resume_skills" }, [
-          _c("aside", [
-            _c("section", [
-              _c("h2", [_vm._v("Information")]),
-              _vm._v(" "),
-              _c("ul", [
-                _c("li", [
-                  _c(
-                    "a",
-                    {
-                      attrs: {
-                        href: "https://codepen.io/jaredpearce/full/iBdxb"
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.resume.email))]
-                  )
+  return _c(
+    "div",
+    { staticStyle: { "margin-top": "100px", position: "relative" } },
+    [
+      _vm.resume
+        ? _c(
+            "main",
+            {
+              staticStyle: {
+                "max-width": "800px",
+                top: "0",
+                left: "0",
+                right: "0",
+                bottom: "0",
+                margin: "0 auto"
+              },
+              attrs: { role: "main", id: "cv-wrapper" }
+            },
+            [
+              _c("div", { staticClass: "page" }, [
+                _c("header", [
+                  _c("h1", { staticStyle: { "text-align": "center" } }, [
+                    _vm._v(
+                      _vm._s(_vm.resume.firstname) +
+                        " " +
+                        _vm._s(_vm.resume.lastname)
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("hr")
                 ]),
                 _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    {
-                      attrs: {
-                        href: "http://mathworks.com/examples",
-                        target: "_blank"
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.resume.phone))]
-                  )
+                _c("section", [
+                  _c("h2", { staticStyle: { "text-align": "center" } }, [
+                    _vm._v("Information")
+                  ]),
+                  _vm._v(" "),
+                  _c("hr"),
+                  _vm._v(" "),
+                  _c("ul", [
+                    _c("li", { staticStyle: { color: "#0056b3" } }, [
+                      _vm._v("Email: " + _vm._s(_vm.resume.email))
+                    ]),
+                    _vm._v(" "),
+                    _c("li", { staticStyle: { color: "#0056b3" } }, [
+                      _vm._v("Phone: " + _vm._s(_vm.resume.phone))
+                    ]),
+                    _vm._v(" "),
+                    _c("li", { staticStyle: { color: "#0056b3" } }, [
+                      _vm._v("Birthday: " + _vm._s(_vm.resume.birthday))
+                    ])
+                  ])
                 ]),
                 _vm._v(" "),
-                _c("li", [
-                  _c(
-                    "a",
-                    {
-                      attrs: {
-                        href: "http://coursework.mathworks.com",
-                        target: "_blank"
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.resume.birthday))]
-                  )
+                _c("section", [
+                  _c("article", [
+                    _c(
+                      "section",
+                      [
+                        _c("h2", { staticStyle: { "text-align": "center" } }, [
+                          _vm._v("Professional Experience")
+                        ]),
+                        _vm._v(" "),
+                        _c("hr"),
+                        _vm._v(" "),
+                        _vm._l(_vm.resume.workExperience, function(exp) {
+                          return _c("div", [
+                            _c("h3", [
+                              _c("b", [_vm._v("Position:")]),
+                              _vm._v(
+                                " " + _vm._s(exp.position) + "\r\n          "
+                              ),
+                              _c("span", { staticStyle: { float: "right" } }, [
+                                _c(
+                                  "time",
+                                  { staticStyle: { color: "#009688" } },
+                                  [_vm._v(_vm._s(exp.start))]
+                                ),
+                                _vm._v("\r\n          –\r\n          "),
+                                _c(
+                                  "time",
+                                  { staticStyle: { color: "#009688" } },
+                                  [_vm._v(_vm._s(exp.end))]
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [
+                              _c("strong", [_vm._v("Company: ")]),
+                              _vm._v(_vm._s(exp.name) + " ")
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [
+                              _c("b", [_vm._v("Location: ")]),
+                              _vm._v(_vm._s(exp.place))
+                            ])
+                          ])
+                        })
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "section",
+                      [
+                        _c("h2", { staticStyle: { "text-align": "center" } }, [
+                          _vm._v("Education")
+                        ]),
+                        _vm._v(" "),
+                        _c("hr"),
+                        _vm._v(" "),
+                        _vm._l(_vm.resume.education, function(edu) {
+                          return _c("div", [
+                            _c("h3", [
+                              _c("b", [_vm._v("Facultet:")]),
+                              _vm._v(
+                                " " + _vm._s(edu.facultet) + "\r\n          "
+                              ),
+                              _c("span", { staticStyle: { float: "right" } }, [
+                                _c(
+                                  "time",
+                                  { staticStyle: { color: "#009688" } },
+                                  [_vm._v(_vm._s(edu.start))]
+                                ),
+                                _vm._v("\r\n          –\r\n          "),
+                                _c(
+                                  "time",
+                                  { staticStyle: { color: "#009688" } },
+                                  [_vm._v(_vm._s(edu.end))]
+                                )
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [
+                              _c("strong", [
+                                _vm._v("School/Institution name: ")
+                              ]),
+                              _vm._v(" " + _vm._s(edu.name) + " ")
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [
+                              _c("strong", [_vm._v("Location: ")]),
+                              _vm._v(" "),
+                              _c("b", [_vm._v(_vm._s(edu.place))])
+                            ])
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", [
+                  _c("aside", [
+                    _c("section", [
+                      _c("h2", { staticStyle: { "text-align": "center" } }, [
+                        _vm._v("Skills")
+                      ]),
+                      _vm._v(" "),
+                      _c("hr"),
+                      _vm._v(" "),
+                      _c(
+                        "ul",
+                        _vm._l(_vm.resume.skills, function(skill) {
+                          return _c("li", [_vm._v(_vm._s(skill.name))])
+                        }),
+                        0
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "section",
+                      [
+                        _c("h2", { staticStyle: { "text-align": "center" } }, [
+                          _vm._v("Languages")
+                        ]),
+                        _vm._v(" "),
+                        _c("hr"),
+                        _vm._v(" "),
+                        _vm._l(_vm.resume.languages, function(language) {
+                          return _c("div", [
+                            _c("h3", [
+                              _vm._v("Language: " + _vm._s(language.name)),
+                              _c("span")
+                            ]),
+                            _vm._v(" "),
+                            _c("p", [_vm._v(_vm._s(language.description))])
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ])
                 ])
               ])
-            ]),
-            _vm._v(" "),
-            _c("section", [
-              _c("h2", [_vm._v("Skills")]),
-              _vm._v(" "),
-              _c(
-                "ul",
-                { staticClass: "technology" },
-                _vm._l(_vm.resume.skills, function(skill) {
-                  return _c("li", [_vm._v(_vm._s(skill.name))])
-                }),
-                0
-              )
-            ]),
-            _vm._v(" "),
-            _c(
-              "section",
-              [
-                _c("h2", [_vm._v("Languages")]),
-                _vm._v(" "),
-                _vm._l(_vm.resume.languages, function(language) {
-                  return _c("div", [
-                    _c("h3", [
-                      _vm._v(_vm._s(language.name)),
-                      _c("span", { staticClass: "time" })
-                    ]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v(_vm._s(language.description))])
-                  ])
-                })
-              ],
-              2
-            )
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.resume
+        ? _c("div", { staticClass: "text-center p-5" }, [
+            _c("button", { on: { click: _vm.toPDF } }, [_vm._v("Export PDF")])
           ])
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "text-center p-5" }, [
-      _c("button", { on: { click: _vm.toPDF } }, [_vm._v("Export PDF")])
-    ])
-  ])
+        : _c("div", { staticClass: "text-center p-5" }, [
+            _vm._v("\r\n  You haven't created your CV yet.\r\n")
+          ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -21286,8 +21396,8 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value: _vm.info,
-                          expression: "info"
+                          value: _vm.sections.info,
+                          expression: "sections.info"
                         }
                       ],
                       attrs: { id: "information" }
@@ -21295,103 +21405,112 @@ var render = function() {
                     [
                       _vm._m(1),
                       _vm._v(" "),
-                      _vm.errors
-                        ? _c("div", [
-                            _vm.errors.firstname
-                              ? _c(
-                                  "p",
-                                  { staticClass: "text-danger mt-2 mb-2" },
-                                  [_vm._v(_vm._s(_vm.errors.firstname[0]))]
-                                )
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _vm.errors.lastname
-                              ? _c(
-                                  "p",
-                                  { staticClass: "text-danger mt-2 mb-2" },
-                                  [_vm._v(_vm._s(_vm.errors.lastname[0]))]
-                                )
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _vm.errors.phone
-                              ? _c(
-                                  "p",
-                                  { staticClass: "text-danger mt-2 mb-2" },
-                                  [_vm._v(_vm._s(_vm.errors.phone[0]))]
-                                )
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _vm.errors.email
-                              ? _c(
-                                  "p",
-                                  { staticClass: "text-danger mt-2 mb-2" },
-                                  [_vm._v(_vm._s(_vm.errors.email[0]))]
-                                )
-                              : _vm._e(),
-                            _vm._v(" "),
-                            _vm.errors.birthday
-                              ? _c(
-                                  "p",
-                                  { staticClass: "text-danger mt-2 mb-2" },
-                                  [_vm._v(_vm._s(_vm.errors.birthday[0]))]
-                                )
-                              : _vm._e()
-                          ])
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("label", { attrs: { for: "firstname" } }, [
-                        _vm._v("Firstname*")
+                      _c("div", { staticClass: "mb-1" }, [
+                        _c("label", { attrs: { for: "firstname" } }, [
+                          _vm._v("Firstname*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          attrs: {
+                            type: "text",
+                            id: "firstname",
+                            name: "firstname"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.firstname
+                          ? _c("span", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errors.firstname[0]))
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        attrs: {
-                          type: "text",
-                          id: "firstname",
-                          name: "firstname"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("label", { attrs: { for: "lastname" } }, [
-                        _vm._v("Lastname*")
+                      _c("div", { staticClass: "mb-1" }, [
+                        _c("label", { attrs: { for: "lastname" } }, [
+                          _vm._v("Lastname*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          attrs: {
+                            type: "text",
+                            id: "lastname",
+                            name: "lastname"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.lastname
+                          ? _c("span", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errors.lastname[0]))
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        attrs: {
-                          type: "text",
-                          id: "lastname",
-                          name: "lastname"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("label", { attrs: { for: "phone" } }, [
-                        _vm._v("Phone*")
+                      _c("div", { staticClass: "mb-1" }, [
+                        _c("label", { attrs: { for: "phone" } }, [
+                          _vm._v("Phone*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          attrs: { type: "text", id: "phone", name: "phone" }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.phone
+                          ? _c("span", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errors.phone[0]))
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        attrs: { type: "text", id: "phone", name: "phone" }
-                      }),
-                      _vm._v(" "),
-                      _c("label", { attrs: { for: "email" } }, [
-                        _vm._v("Email*")
+                      _c("div", { staticClass: "mb-1" }, [
+                        _c("label", { attrs: { for: "email" } }, [
+                          _vm._v("Email*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          attrs: { type: "email", id: "email", name: "email" }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.email
+                          ? _c("span", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errors.email[0]))
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        attrs: { type: "email", id: "email", name: "email" }
-                      }),
-                      _vm._v(" "),
-                      _c("label", { attrs: { for: "birthday" } }, [
-                        _vm._v("Birthday*")
+                      _c("div", { staticClass: "mb-1" }, [
+                        _c("label", { attrs: { for: "birthday" } }, [
+                          _vm._v("Birthday*")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          attrs: {
+                            type: "date",
+                            id: "birthday",
+                            name: "birthday"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.birthday
+                          ? _c("span", { staticClass: "text-danger" }, [
+                              _vm._v(_vm._s(_vm.errors.birthday[0]))
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
-                      _c("input", {
-                        attrs: {
-                          type: "date",
-                          id: "birthday",
-                          name: "birthday"
-                        }
-                      }),
+                      _c("hr"),
                       _vm._v(" "),
-                      _c("hr")
+                      _c(
+                        "button",
+                        {
+                          staticClass: "float-right mb-2",
+                          on: {
+                            click: function($event) {
+                              return _vm.showSection("edu")
+                            }
+                          }
+                        },
+                        [_vm._v("Next")]
+                      )
                     ]
                   ),
                   _vm._v(" "),
@@ -21402,73 +21521,275 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value: _vm.edu,
-                          expression: "edu"
+                          value: _vm.sections.edu,
+                          expression: "sections.edu"
                         }
                       ],
                       attrs: { id: "education" }
                     },
                     [
-                      _c("div", { staticClass: "edu" }, [
-                        _vm._m(2),
-                        _vm._v(" "),
-                        _vm.errors
-                          ? _c("div", [
-                              _vm.errors.educations
-                                ? _c(
-                                    "p",
-                                    { staticClass: "text-danger mt-2 mb-2" },
-                                    [_vm._v(_vm._s(_vm.errors.educations[0]))]
+                      _vm._l(_vm.educations, function(education, index) {
+                        return _c("div", { staticClass: "edu" }, [
+                          _vm._m(2, true),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "name" } }, [
+                              _vm._v("Name*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: education.name,
+                                  expression: "education.name"
+                                }
+                              ],
+                              attrs: { type: "text", name: "name" },
+                              domProps: { value: education.name },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    education,
+                                    "name",
+                                    $event.target.value
                                   )
-                                : _vm._e()
-                            ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "name" } }, [
-                          _vm._v("Name*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "text", name: "name" } }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "facultet" } }, [
-                          _vm._v("Facultet*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          attrs: { type: "text", name: "facultet" }
-                        }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "place" } }, [
-                          _vm._v("Address*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "text", name: "place" } }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "start" } }, [
-                          _vm._v("Start*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "date", name: "start" } }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "end" } }, [
-                          _vm._v("End*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "date", name: "end" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("button", {
-                        staticClass: "float-right fa fa-plus mt-4",
-                        attrs: {
-                          type: "button",
-                          "aria-hidden": "true",
-                          id: "eduButton"
-                        },
-                        on: { click: _vm.addEducation }
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["educations." + index + ".name"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "educations." + index + ".name"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "facultet" } }, [
+                              _vm._v("Facultet*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: education.facultet,
+                                  expression: "education.facultet"
+                                }
+                              ],
+                              attrs: { type: "text", name: "facultet" },
+                              domProps: { value: education.facultet },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    education,
+                                    "facultet",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["educations." + index + ".facultet"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "educations." + index + ".facultet"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "place" } }, [
+                              _vm._v("Address*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: education.place,
+                                  expression: "education.place"
+                                }
+                              ],
+                              attrs: { type: "text", name: "place" },
+                              domProps: { value: education.place },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    education,
+                                    "place",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["educations." + index + ".place"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "educations." + index + ".place"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "start" } }, [
+                              _vm._v("Start*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: education.start,
+                                  expression: "education.start"
+                                }
+                              ],
+                              attrs: { type: "date", name: "start" },
+                              domProps: { value: education.start },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    education,
+                                    "start",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["educations." + index + ".start"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "educations." + index + ".start"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "end" } }, [
+                              _vm._v("End*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: education.end,
+                                  expression: "education.end"
+                                }
+                              ],
+                              attrs: { type: "date", name: "end" },
+                              domProps: { value: education.end },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    education,
+                                    "end",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["educations." + index + ".end"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "educations." + index + ".end"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        ])
                       }),
                       _vm._v(" "),
+                      _c("div", { staticClass: "text-center" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "float-left mt-4 mb-2",
+                            on: {
+                              click: function($event) {
+                                return _vm.showSection("info")
+                              }
+                            }
+                          },
+                          [_vm._v("Prev")]
+                        ),
+                        _vm._v(" "),
+                        _c("button", {
+                          staticClass: "fa fa-plus mt-4 mb-2",
+                          attrs: {
+                            type: "button",
+                            "aria-hidden": "true",
+                            id: "eduButton"
+                          },
+                          on: { click: _vm.addEducation }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "float-right mt-4 mb-2",
+                            on: {
+                              click: function($event) {
+                                return _vm.showSection("exp")
+                              }
+                            }
+                          },
+                          [_vm._v("Next")]
+                        )
+                      ]),
+                      _vm._v(" "),
                       _c("hr")
-                    ]
+                    ],
+                    2
                   ),
                   _vm._v(" "),
                   _c(
@@ -21478,69 +21799,275 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value: _vm.exp,
-                          expression: "exp"
+                          value: _vm.sections.exp,
+                          expression: "sections.exp"
                         }
                       ],
                       attrs: { id: "experience" }
                     },
                     [
-                      _c("div", { staticClass: "work mt-5" }, [
-                        _vm._m(3),
-                        _vm._v(" "),
-                        _vm.errors
-                          ? _c("div", [
-                              _vm.errors.work_places
-                                ? _c(
-                                    "p",
-                                    { staticClass: "text-danger mt-2 mb-2" },
-                                    [_vm._v(_vm._s(_vm.errors.work_places[0]))]
+                      _vm._l(_vm.experiences, function(experience, index) {
+                        return _c("div", { staticClass: "exp" }, [
+                          _vm._m(3, true),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "name" } }, [
+                              _vm._v("Name*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: experience.name,
+                                  expression: "experience.name"
+                                }
+                              ],
+                              attrs: { type: "text", name: "name" },
+                              domProps: { value: experience.name },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    experience,
+                                    "name",
+                                    $event.target.value
                                   )
-                                : _vm._e()
-                            ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "name" } }, [
-                          _vm._v("Company*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "text", name: "name" } }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "position" } }, [
-                          _vm._v("Position*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          attrs: { type: "text", name: "position" }
-                        }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "place" } }, [
-                          _vm._v("Location*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "text", name: "place" } }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "start" } }, [
-                          _vm._v("Start*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "date", name: "start" } }),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "end" } }, [
-                          _vm._v("End*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "date", name: "end" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("button", {
-                        staticClass: "float-right fa fa-plus mt-4",
-                        attrs: { type: "button", "aria-hidden": "true" },
-                        on: { click: _vm.addWork }
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["experiences." + index + ".name"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "experiences." + index + ".name"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "position" } }, [
+                              _vm._v("Position*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: experience.position,
+                                  expression: "experience.position"
+                                }
+                              ],
+                              attrs: { type: "text", name: "position" },
+                              domProps: { value: experience.position },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    experience,
+                                    "position",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["experiences." + index + ".position"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "experiences." + index + ".position"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "place" } }, [
+                              _vm._v("Address*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: experience.place,
+                                  expression: "experience.place"
+                                }
+                              ],
+                              attrs: { type: "text", name: "place" },
+                              domProps: { value: experience.place },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    experience,
+                                    "place",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["experiences." + index + ".place"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "experiences." + index + ".place"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "start" } }, [
+                              _vm._v("Start*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: experience.start,
+                                  expression: "experience.start"
+                                }
+                              ],
+                              attrs: { type: "date", name: "start" },
+                              domProps: { value: experience.start },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    experience,
+                                    "start",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["experiences." + index + ".start"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "experiences." + index + ".start"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "end" } }, [
+                              _vm._v("End*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: experience.end,
+                                  expression: "experience.end"
+                                }
+                              ],
+                              attrs: { type: "date", name: "end" },
+                              domProps: { value: experience.end },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    experience,
+                                    "end",
+                                    $event.target.value
+                                  )
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["experiences." + index + ".end"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "experiences." + index + ".end"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        ])
                       }),
                       _vm._v(" "),
+                      _c("div", { staticClass: "text-center" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "float-left mt-4 mb-2",
+                            on: {
+                              click: function($event) {
+                                return _vm.showSection("edu")
+                              }
+                            }
+                          },
+                          [_vm._v("Prev")]
+                        ),
+                        _vm._v(" "),
+                        _c("button", {
+                          staticClass: "fa fa-plus mt-4 mb-2",
+                          attrs: {
+                            type: "button",
+                            "aria-hidden": "true",
+                            id: "eduButton"
+                          },
+                          on: { click: _vm.addWork }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "float-right mt-4 mb-2",
+                            on: {
+                              click: function($event) {
+                                return _vm.showSection("lang")
+                              }
+                            }
+                          },
+                          [_vm._v("Next")]
+                        )
+                      ]),
+                      _vm._v(" "),
                       _c("hr")
-                    ]
+                    ],
+                    2
                   ),
                   _vm._v(" "),
                   _c(
@@ -21550,47 +22077,193 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value: _vm.lang,
-                          expression: "lang"
+                          value: _vm.sections.lang,
+                          expression: "sections.lang"
                         }
                       ],
                       attrs: { id: "languages" }
                     },
                     [
-                      _c("div", { staticClass: "Languages mt-5" }, [
-                        _vm._m(4),
-                        _vm._v(" "),
-                        _vm.errors
-                          ? _c("div", [
-                              _vm.errors.languages
-                                ? _c(
-                                    "p",
-                                    { staticClass: "text-danger mt-2 mb-2" },
-                                    [_vm._v(_vm._s(_vm.errors.languages[0]))]
+                      _vm._l(_vm.languages, function(language, index) {
+                        return _c("div", { staticClass: "Languages" }, [
+                          _vm._m(4, true),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "language" } }, [
+                              _vm._v("Language*")
+                            ]),
+                            _vm._v(" "),
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: language.name,
+                                  expression: "language.name"
+                                }
+                              ],
+                              attrs: { type: "text", name: "language" },
+                              domProps: { value: language.name },
+                              on: {
+                                input: function($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    language,
+                                    "name",
+                                    $event.target.value
                                   )
-                                : _vm._e()
-                            ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "language" } }, [
-                          _vm._v("Language*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          attrs: { type: "text", name: "language" }
-                        }),
-                        _vm._v(" "),
-                        _vm._m(5)
-                      ]),
-                      _vm._v(" "),
-                      _c("button", {
-                        staticClass: "float-right fa fa-plus mt-4",
-                        attrs: { type: "button", "aria-hidden": "true" },
-                        on: { click: _vm.addLanguage }
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.errors["languages." + index + ".name"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "languages." + index + ".name"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ]),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "mb-1" }, [
+                            _c("label", { attrs: { for: "language" } }, [
+                              _vm._v("Level*")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "select",
+                              {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: language.description,
+                                    expression: "language.description"
+                                  }
+                                ],
+                                staticClass: "custom-select",
+                                on: {
+                                  change: function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      language,
+                                      "description",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
+                                  }
+                                }
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  {
+                                    attrs: {
+                                      value: "",
+                                      disabled: "",
+                                      selected: ""
+                                    }
+                                  },
+                                  [_vm._v("Choose your option")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Native" } }, [
+                                  _vm._v("Native")
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "option",
+                                  { attrs: { value: "Upper Intermediate" } },
+                                  [_vm._v("Upper Intermediate")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "option",
+                                  { attrs: { value: "Intermediate" } },
+                                  [_vm._v("Intermediate")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "option",
+                                  { attrs: { value: "Pre-Intermediate" } },
+                                  [_vm._v("Pre-Intermediate")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "option",
+                                  { attrs: { value: "Elementary" } },
+                                  [_vm._v("Elementary")]
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _vm.errors["languages." + index + ".description"]
+                              ? _c("span", { staticClass: "text-danger" }, [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.errors[
+                                        "languages." + index + ".description"
+                                      ][0]
+                                    )
+                                  )
+                                ])
+                              : _vm._e()
+                          ])
+                        ])
                       }),
                       _vm._v(" "),
+                      _c("div", { staticClass: "text-center" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "float-left mt-4 mb-2",
+                            on: {
+                              click: function($event) {
+                                return _vm.showSection("exp")
+                              }
+                            }
+                          },
+                          [_vm._v("Prev")]
+                        ),
+                        _vm._v(" "),
+                        _c("button", {
+                          staticClass: "fa fa-plus mt-4 mb-2",
+                          attrs: { type: "button", "aria-hidden": "true" },
+                          on: { click: _vm.addLanguage }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "float-right mt-4 mb-2",
+                            on: {
+                              click: function($event) {
+                                return _vm.showSection("skill")
+                              }
+                            }
+                          },
+                          [_vm._v("Next")]
+                        )
+                      ]),
+                      _vm._v(" "),
                       _c("hr")
-                    ]
+                    ],
+                    2
                   ),
                   _vm._v(" "),
                   _c(
@@ -21600,43 +22273,78 @@ var render = function() {
                         {
                           name: "show",
                           rawName: "v-show",
-                          value: _vm.skill,
-                          expression: "skill"
+                          value: _vm.sections.skill,
+                          expression: "sections.skill"
                         }
                       ],
                       attrs: { id: "skills" }
                     },
                     [
-                      _c("div", { staticClass: "skills mt-5" }, [
-                        _vm._m(6),
-                        _vm._v(" "),
-                        _vm.errors
-                          ? _c("div", [
-                              _vm.errors.skills
-                                ? _c(
-                                    "p",
-                                    { staticClass: "text-danger mt-2 mb-2" },
-                                    [_vm._v(_vm._s(_vm.errors.skills[0]))]
+                      _vm._l(_vm.skills, function(skill, index) {
+                        return _c("div", { staticClass: "skills" }, [
+                          _vm._m(5, true),
+                          _vm._v(" "),
+                          _c("label", { attrs: { for: "skill" } }, [
+                            _vm._v("Skill*")
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: skill.name,
+                                expression: "skill.name"
+                              }
+                            ],
+                            attrs: { type: "text", name: "skill" },
+                            domProps: { value: skill.name },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(skill, "name", $event.target.value)
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _vm.errors["skills." + index + ".name"]
+                            ? _c("span", { staticClass: "text-danger" }, [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.errors["skills." + index + ".name"][0]
                                   )
-                                : _vm._e()
-                            ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _c("label", { attrs: { for: "skill" } }, [
-                          _vm._v("Skill*")
-                        ]),
-                        _vm._v(" "),
-                        _c("input", { attrs: { type: "text", name: "skill" } })
-                      ]),
-                      _vm._v(" "),
-                      _c("button", {
-                        staticClass: "float-right fa fa-plus mt-4",
-                        attrs: { type: "button", "aria-hidden": "true" },
-                        on: { click: _vm.addSkill }
+                                )
+                              ])
+                            : _vm._e()
+                        ])
                       }),
                       _vm._v(" "),
+                      _c("div", { staticClass: "text-center" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "float-left mt-4 mb-2",
+                            on: {
+                              click: function($event) {
+                                return _vm.showSection("lang")
+                              }
+                            }
+                          },
+                          [_vm._v("Prev")]
+                        ),
+                        _vm._v(" "),
+                        _c("button", {
+                          staticClass: "fa fa-plus mt-4 mb-2",
+                          attrs: { type: "button", "aria-hidden": "true" },
+                          on: { click: _vm.addSkill }
+                        })
+                      ]),
+                      _vm._v(" "),
                       _c("hr")
-                    ]
+                    ],
+                    2
                   )
                 ])
               ]
@@ -21653,8 +22361,8 @@ var render = function() {
                   {
                     name: "show",
                     rawName: "v-show",
-                    value: _vm.creatButton,
-                    expression: "creatButton"
+                    value: _vm.createButton,
+                    expression: "createButton"
                   }
                 ],
                 on: { click: _vm.createCV }
@@ -21701,7 +22409,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("h5", { staticClass: "w3-opacity" }, [
-      _c("b", [_vm._v("Work Experience")])
+      _c("b", [_vm._v("Professional Experience")])
     ])
   },
   function() {
@@ -21710,32 +22418,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("h5", { staticClass: "w3-opacity" }, [
       _c("b", [_vm._v("Languages")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("select", { staticClass: "custom-select" }, [
-      _c("option", { attrs: { value: "", disabled: "", selected: "" } }, [
-        _vm._v("Choose your option")
-      ]),
-      _vm._v(" "),
-      _c("option", { attrs: { value: "Native" } }, [_vm._v("Native")]),
-      _vm._v(" "),
-      _c("option", { attrs: { value: "Upper Intermediate" } }, [
-        _vm._v("Upper Intermediate")
-      ]),
-      _vm._v(" "),
-      _c("option", { attrs: { value: "Intermediate" } }, [
-        _vm._v("Intermediate")
-      ]),
-      _vm._v(" "),
-      _c("option", { attrs: { value: "Pre-Intermediate" } }, [
-        _vm._v("Pre-Intermediate")
-      ]),
-      _vm._v(" "),
-      _c("option", { attrs: { value: "Elementary" } }, [_vm._v("Elementary")])
     ])
   },
   function() {

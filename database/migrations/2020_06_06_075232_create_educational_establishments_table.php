@@ -18,8 +18,8 @@ class CreateEducationalEstablishmentsTable extends Migration
             $table->string('name');
             $table->string('facultet');
             $table->string('place');
-            $table->dateTime('start');
-            $table->dateTime('end');
+            $table->date('start');
+            $table->date('end');
             $table->unsignedBigInteger('resume_id');
             $table->foreign('resume_id')->references('id')->on('resumes')->onDelete('cascade');
             $table->timestamps();

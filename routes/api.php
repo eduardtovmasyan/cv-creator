@@ -21,11 +21,8 @@ Route::resource('user', 'UserController', [
 Route::post('/login', "LoginController@logIn");
 
 Route::group(['middleware' => ['auth:api']], function() {
-    Route::resource('resume', 'ResumeController', [
-        'only' => ['index', 'store', 'show', 'update', 'destroy']
-    ]);
-
-    Route::get('/download', 'ResumeController@exportPDF');
-    
+	Route::post('resume', 'ResumeController@store');
+	Route::get('resume', 'ResumeController@show');
+    Route::get('/export', 'ResumeController@exportPDF');
     Route::post('/logout', 'LoginController@logOut');
 });
