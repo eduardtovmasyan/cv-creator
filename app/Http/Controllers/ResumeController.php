@@ -9,6 +9,7 @@ use Validator;
 use App\Resume;
 use App\Language;
 use App\WorkPlace;
+use App\Jobs\SendCvToEmail;
 use Illuminate\Http\Request;
 use App\EducationalEstablishment;
 use Illuminate\Support\Facades\Auth;
@@ -144,12 +145,8 @@ class ResumeController extends Controller
     {
         $user = Auth::user();
         $cv = $user->resumes()->orderBy('created_at', 'desc')->first();
-        $data = ['resume' => $cv];
-        $time = time();
-        $pdf = PDF::loadView('cv', $data)->output();
-        $fileName = "cv-{$time}.pdf";
-        Storage::disk('public')->put($fileName, $pdf);
+        SendCvToEmail::dispatch($cv);
 
-        return asset("storage/{$fileName}");
+        return response(['message' => 'You\'ll recive the CV by the email soon.']);
     }
 }
