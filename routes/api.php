@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::resource('user', 'UserController', [
+    'only' => ['index', 'store', 'show', 'update', 'destroy']
+]);
+
+Route::post('/login', "LoginController@logIn");
+
+Route::group(['middleware' => ['auth:api']], function() {
+	Route::post('resume', 'ResumeController@store');
+	Route::get('resume', 'ResumeController@show');
+    Route::get('/export', 'ResumeController@exportPDF');
+    Route::post('/logout', 'LoginController@logOut');
 });

@@ -5,10 +5,17 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use HasApiTokens, Notifiable;
+    
+    /**
+     * @var string
+     */
+    const TYPE_ADMIN = 'admin';
+    const TYPE_USER = 'user';
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +23,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'surname', 'gender', 'birthday', 'email', 
+        'password', 'phone', 'type', 'is_active', 'group_id',
     ];
 
     /**
@@ -36,4 +44,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function resumes()
+    {
+        return $this->hasMany(Resume::class);
+    } 
 }
